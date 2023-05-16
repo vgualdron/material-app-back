@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -23,8 +24,12 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (\Throwable $e, $request) {
+            if ($e instanceof AccessDeniedHttpException) {
+                return response()->json([
+                    'message' => ['No tienes autorización para realizar esta acción.']
+                ], Response::HTTP_FORBIDDEN);
+            }
         });
     }
 }
