@@ -1,4 +1,4 @@
-name: Build
+name: Deployment
 on: 
   push:
     branches:
@@ -14,11 +14,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           persist-credential: false
-
-      - name: Install and Build 🔧
-        run: |
-          npm --openssl-legacy-provider install
-          npm --openssl-legacy-provider run build
       - name: Sync files 📂 Server flamecol.com
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -29,4 +24,4 @@ jobs:
           log-level: verbose
           protocol: ftps
           timeout: 120000
-          local-dir: ./dist/spa/
+          local-dir: ./
