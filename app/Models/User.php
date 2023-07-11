@@ -13,18 +13,21 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable, HasRoles;
     
     public $table = "users";
+
+    protected $guard_name = 'api';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',        
         'document_number',
+        'name',
         'phone',
         'password',
         'yard',
-        'role',
+        'editable',
+        'active',
         'created_at',
         'updated_at'
     ];

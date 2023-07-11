@@ -18,7 +18,9 @@ class UserSeeder extends Seeder
             "document_number" => "admin",
             "phone" => "000000",
             "yard" => null,
+            "editable" => 0,
+            "active" => 1,
             "password" => Hash::make('4dm1n')
-        ])->assignRole('admin');
+        ])->assignRole('Administrador');
     }
 }

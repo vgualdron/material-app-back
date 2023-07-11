@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('yards', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->string('code', 30)->collation('utf8_general_ci');
-            $table->string('name', 100)->collation('utf8_general_ci');
-            $table->unsignedBigInteger('zone')->nullable();
-            $table->decimal('longitude', 12,6)->nullable();
-            $table->decimal('latitude', 12,6)->nullable();
+            $table->string('code', 10)->collation('utf8_general_ci')->unique();
+            $table->string('name', 30)->collation('utf8_general_ci')->unique();
+            $table->unsignedBigInteger('zone');
+            $table->decimal('longitude', 9,5)->nullable();
+            $table->decimal('latitude', 8,5)->nullable();
+            $table->boolean('active')->default(1);
             $table->foreign('zone')->references('id')->on('zones');
             $table->timestamps();
         });

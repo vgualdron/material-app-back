@@ -3,10 +3,11 @@
     
     interface UserServiceInterface
     {
-        function login(string $documentNumber, string $password);
-        /*function get(int $id);
-        function insert(array $zone);
-        function update(array $zone, int $id);
-        function delete(int $id);        */
+        function list(int $displayAll);
+        function get(int $id);
+        function create(array $user);
+        function update(array $user, int $id);
+        function delete(int $user);
+        function updateProfile(array $user, int $id);
     }
 ?>

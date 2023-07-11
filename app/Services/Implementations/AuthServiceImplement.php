@@ -4,7 +4,6 @@
     use Illuminate\Support\Facades\{Hash, Auth};
     use Symfony\Component\HttpFoundation\Response;
     use App\Models\{OauthClient, User, OauthAccessToken};
-    
     class AuthServiceImplement implements AuthServiceInterface{
 
         private $oauthClient;
@@ -56,30 +55,93 @@
 
                         if (!empty($grantClient)) {
                             $this->oauthAccessToken::where('user_id', '=', $user->id)
-                                ->update(['revoked' => 1]);
+                                ->delete();
                             $token = $user->createToken($grantClient)->accessToken;
+                            $permissions = $user->getPermissionsViaRoles();
+                            $roles = $user->getRoleNames();
+                            $dataPermissions = [];
+                            $menu = [];
+                            foreach ($permissions as $permission) {
+                                $menu[] = [
+                                    'route' => $permission->route,
+                                    'name' => $permission->group,
+                                    'menu' => $permission->menu
+                                ];
+                                $dataPermissions[] = [
+                                    'name' => $permission->name,
+                                    'displayName' => $permission->display_name
+                                ];
+                            }
+                            $userData = array(
+                                'name' => $user->name,
+                                'document' => $user->document_number,
+                                'yard' => $user->yard,
+                                'user' => $user->id
+                            );
                             return response()->json([
                                 'token' => $token,
-                                'user' => $user
+                                'user' => $userData,
+                                'permissions' => array_values(array_unique($dataPermissions, SORT_REGULAR)),
+                                'menu' => array_values(array_unique($menu, SORT_REGULAR)),
+                                'roles' => $roles
                             ], Response::HTTP_OK);
                         } else {
                             return response()->json([
-                                'message' => ['Se ha presentado un inconveniente al generar el token de sesión']
+                                'message' => [
+                                    [
+                                        'text' => 'Error de autenticación',
+                                        'detail' => 'Se ha presentado un inconveniente al generar el token de sesión'
+                                    ]
+                                ]
                             ], Response::HTTP_NOT_FOUND);
                         }
                     } else {
                         return response()->json([
-                            'message' => ['Las credenciales ingresadas son incorrectas']
+                            'message' => [
+                                [
+                                    'text' => 'Error de autenticación',
+                                    'detail' => 'La contraseña ingresada es incorrecta'
+                                ]
+                            ]
                         ], Response::HTTP_NOT_FOUND);
                     }
                 } else {
                     return response()->json([
-                        'message' => ['El usuario con el número de documento "'.$documentNumber.'" no se encuentra registrado']
+                        'message' => [
+                            [
+                                'text' => 'Error de autenticación',
+                                'detail' => 'El usuario con el número de documento "'.$documentNumber.'" no se encuentra registrado'
+                            ]
+                        ]
                     ], Response::HTTP_NOT_FOUND);
                 }
             } catch (\Throwable $t) {
+
                 return response()->json([
-                    'message' => ['Se ha presentado un error en nuestro servicio, por favor, contacte con un administrador']
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error en el servicio',
+                            'detail' => 'por favor, contacte con un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function logout(){
+            try {
+                $id = Auth::user()->id;
+                $this->oauthAccessToken::where('user_id', '=', $id)
+                    ->delete();
+                return response()->json([], Response::HTTP_OK);
+            } catch (\Throwable $t) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error en el servicio',
+                            'detail' => 'por favor, contacte con un administrador'
+                        ]
+                    ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }

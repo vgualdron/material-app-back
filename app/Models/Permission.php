@@ -17,7 +17,9 @@ class Permission extends Model
         'name',
         'guard_name',
         'display_name',
-        'offline'
+        'group',
+        'route',
+        'menu'
     ];
 
     /**
@@ -27,16 +29,4 @@ class Permission extends Model
      */
     protected $hidden = [
     ];
-
-    function toArray(){
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'guardName' => $this->guard_name,
-            'isFunction' => $this->is_function,
-            'displayName' => $this->display_name,
-            'offline' => $this->offline,
-            'general' => $this->general
-        ];
-    }
 }

@@ -20,8 +20,12 @@ class AuthController extends Controller
     }
     
     function login(){
-        $document_number = $this->request->document_number;
+        $documentNumber = $this->request->documentNumber;
         $password = $this->request->password;
-        return $this->service->login($document_number, $password);
+        return $this->service->login($documentNumber, $password);
+    }
+
+    function logout(){
+        return $this->service->logout();
     }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->string('code', 10)->collation('utf8_general_ci');
-            $table->string('name', 30)->collation('utf8_general_ci');
+            $table->string('code', 10)->collation('utf8_general_ci')->required()->unique();
+            $table->string('name', 30)->collation('utf8_general_ci')->required()->unique();
             $table->timestamps();
         });
     }

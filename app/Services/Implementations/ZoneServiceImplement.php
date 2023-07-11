@@ -3,13 +3,19 @@
     use App\Services\Interfaces\ZoneServiceInterface;
     use Symfony\Component\HttpFoundation\Response;
     use App\Models\Zone;
+    use App\Validator\ZoneValidator;
+    use App\Traits\Commons;
     
     class ZoneServiceImplement implements ZoneServiceInterface {
-        
-        private $zone;
 
-        function __construct(){
+        use Commons;
+
+        private $zone;
+        private $validator;
+
+        function __construct(ZoneValidator $validator){
             $this->zone = new Zone;
+            $this->validator = $validator;
         }    
 
         function list(){
@@ -23,12 +29,22 @@
                     ], Response::HTTP_OK);
                 } else {
                     return response()->json([
-                        'message' => ['No hay zonas para mostrar']
+                        'message' => [
+                            [
+                                'text' => 'No hay zonas para mostrar',
+                                'detail' => 'Aun no ha registrado ninguna zona'
+                            ]
+                        ]
                     ], Response::HTTP_NOT_FOUND);
                 }
             } catch (\Throwable $e) {
                 return response()->json([
-                    'message' => ['Se ha presentado un error al cargar las zonas, intente recargando la página']
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al cargar las zonas',
+                            'detail' => 'intente recargando la página'
+                        ]
+                    ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
@@ -36,56 +52,126 @@
 
         function create(array $zone){
             try {
+                $validation = $this->validate($this->validator, $zone, null, 'registrar', 'zona', null);
+                if ($validation['success'] === false) {
+                    return response()->json([
+                        'message' => $validation['message']
+                    ], Response::HTTP_BAD_REQUEST);
+                }
                 $status = $this->zone::create([
                     'code' => $zone['code'],
                     'name' => $zone['name']
                 ]);
                 return response()->json([
-                    'message' => ['Zona creada con éxito']
+                    'message' => [
+                        [
+                            'text' => 'Zona registrada con éxito',
+                            'detail' => null
+                        ]
+                    ]
                 ], Response::HTTP_OK);
             } catch (\Throwable $e) {
                 return response()->json([
-                    'message' => ['Se ha presentado un error al registrar la zona']
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al registrar la zona',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
 
         function update(array $zone, int $id){
             try {
-                $zone = $this->zone::find($id);
-                if(!empty($sql)) {
-                    $zone->name = $zone['name'];
-                    $zone->code = $zone['code'];
-                    $zone->save();
+                $validation = $this->validate($this->validator, $zone, $id, 'actualizar', 'zona', null);
+                if ($validation['success'] === false) {
                     return response()->json([
-                        'message' => ['Zona actualizada con éxito']
+                        'message' => $validation['message']
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+                $sql = $this->zone::find($id);
+                if(!empty($sql)) {
+                    $sql->name = $zone['name'];
+                    $sql->code = $zone['code'];
+                    $sql->save();
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Zona actualizada con éxito',
+                                'detail' => null
+                            ]
+                        ]
                     ], Response::HTTP_OK);
                 } else {
                     return response()->json([
-                        'message' => ['La zona que intenta eliminar, no existe']
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al actualizar la zona',
+                                'detail' => 'La zona no existe'
+                            ]
+                        ]
                     ], Response::HTTP_NOT_FOUND);
                 }
             } catch (\Throwable $e) {
                 return response()->json([
-                    'message' => ['Se ha presentado un error al actualizar la zona']
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al actualizar la zona',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
 
         function delete(int $id){   
             try {
-                $deleted = $this->zone::where('id', $id)->delete();
-                return response()->json([
-                    'message' => ['Zona eliminada con éxito']
-                ], Response::HTTP_OK);
+                $sql = $this->zone::find($id);
+                if(!empty($sql)) {
+                    $deleted = $sql->delete();
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Zona eliminada con éxito',
+                                'detail' => null
+                            ]
+                        ]
+                    ], Response::HTTP_OK);
+                } else {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al eliminar la zona',
+                                'detail' => 'La zona no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
             } catch (\Throwable $e) {
-                return response()->json([
-                    'message' => ['Se ha presentado un error al eliminar la zona']
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                if ($e->getCode() !== "23000") {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al eliminar la zona',
+                                'detail' => 'Si este problema persiste, contacte con un administrador'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                } else {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'No se permite eliminar el registro',
+                                'detail' => 'La zona se encuentra asociada a otro registro'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
             }
         }
 
-        function get(int $id){   
+        function get(int $id){
             try {
                 $sql = $this->zone::select('id', 'code', 'name')
                             ->where('id', $id)   
@@ -96,12 +182,22 @@
                     ], Response::HTTP_OK);
                 } else {
                     return response()->json([
-                        'message' => ['Esta zona no existe']
+                        'message' => [
+                            [
+                                'text' => 'La zona no existe',
+                                'detail' => 'por favor recargue la página'
+                            ]
+                        ]
                     ], Response::HTTP_NOT_FOUND);
                 }
             } catch (\Throwable $e) {
                 return response()->json([
-                    'message' => ['Se ha presentado un error al eliminar la zona']
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al buscar la zona',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }

@@ -18,7 +18,12 @@ class Authenticate extends Middleware
     protected function unauthenticated($request, array $guards)
     {
         abort(response()->json([
-            'message' => ['No se ha autenticado en el sistema'],
+            'message' => [
+                [
+                    'text' => 'No hay una sesión activa',
+                    'detail' => 'Por favor, cierre su sesión local e iniciela nuevamente',
+                ]
+            ],
         ], 401));
     }
 }

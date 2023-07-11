@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
-            $table->string('name', 255)->collation('utf8_general_ci');
-            $table->string('document_number', 50)->collation('utf8_general_ci');
-            $table->string('phone', 50)->collation('utf8_general_ci');            
+            $table->string('document_number', 15)->collation('utf8_general_ci');
+            $table->string('name', 50)->collation('utf8_general_ci');
+            $table->string('phone', 15)->collation('utf8_general_ci');
             $table->string('password', 255)->collation('utf8_general_ci');
             $table->unsignedBigInteger('yard')->nullable();
+            $table->boolean('active')->default(1);
+            $table->boolean('editable')->default(1);
             $table->foreign('yard')->references('id')->on('yards');
-            $table->timestamps();            
+            $table->timestamps();
         });
     }
 

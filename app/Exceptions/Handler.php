@@ -27,8 +27,22 @@ class Handler extends ExceptionHandler
         $this->renderable(function (\Throwable $e, $request) {
             if ($e instanceof AccessDeniedHttpException) {
                 return response()->json([
-                    'message' => ['No tienes autorización para realizar esta acción.']
+                    'message' => [
+                        [
+                            'text' => 'No tienes permiso para realizar esta acción',
+                            'detail' => 'Para obtener autorización, contacte con un administrador'
+                        ]
+                    ]
                 ], Response::HTTP_FORBIDDEN);
+            } else if ($e instanceof \PDOException) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un problema al conectar con la base de datos',
+                            'detail' => 'Por favor informe a un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         });
     }

@@ -11,8 +11,8 @@ class ZoneController extends Controller
     private $request;
 
     public function __construct(Request $request, ZoneServiceImplement $service) { 
-            $this->request = $request;
-            $this->service = $service;
+        $this->request = $request;
+        $this->service = $service;
     }
 
     function list(){
