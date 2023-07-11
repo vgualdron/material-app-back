@@ -1,0 +1,32 @@
+name: Build
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.18.1]
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          persist-credential: false
+
+      - name: Install and Build 🔧
+        run: |
+          npm --openssl-legacy-provider install
+          npm --openssl-legacy-provider run build
+      - name: Sync files 📂 Server flamecol.com
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_SERVER_NAME }}
+          username: ${{ secrets.FTP_USER_NAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          dangerous-clean-slate: true
+          log-level: verbose
+          protocol: ftps
+          timeout: 120000
+          local-dir: ./dist/spa/
