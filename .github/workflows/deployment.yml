@@ -18,7 +18,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER_NAME }}
           username: ${{ secrets.FTP_USER_NAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          dangerous-clean-slate: true
+          dangerous-clean-slate: false
           log-level: verbose
           protocol: ftps
           timeout: 120000
