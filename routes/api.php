@@ -28,6 +28,10 @@ use App\Http\Controllers\{
 |
 */
 
+Route::get('/health', function (Request $request) {
+    return 'Health...';
+});
+
 Route::group(["prefix" => "/auth"], function () {
     Route::get('/get-active-token', [AuthController::class, 'getActiveToken'])->name('auth.getActiveToken');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
