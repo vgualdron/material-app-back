@@ -116,7 +116,7 @@
                     ], Response::HTTP_NOT_FOUND);
                 }
             } catch (\Throwable $t) {
-
+                dd($t->getMessage());
                 return response()->json([
                     'message' => [
                         [
