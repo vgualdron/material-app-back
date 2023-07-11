@@ -26,3 +26,5 @@ jobs:
           exclude: |
             **/vendor/**
             **/.env*
+            **/.git*
+            **/.git*/**
