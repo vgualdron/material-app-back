@@ -282,7 +282,7 @@
                                 ]
                             ], Response::HTTP_BAD_REQUEST);
                         }
-                        $a = str_replace(array("SI", "NO"), array(1, 0), $a);
+                        $arrayData = str_replace(array("SI", "NO"), array(1, 0), $arrayData);
                         array_unshift($arrayData, null);
                         array_push($arrayData, 1);
                         $arrayInsert = array_combine($header, $arrayData);
