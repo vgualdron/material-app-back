@@ -282,8 +282,11 @@
                                 ]
                             ], Response::HTTP_BAD_REQUEST);
                         }
+                        dd($arrayData);
                         array_unshift($arrayData, null);
+                        dd($arrayData);
                         array_push($arrayData, 1);
+                        dd($arrayData);
                         $arrayInsert = array_combine($header, $arrayData);
                         $validation = $this->validate($this->basicValidator, $arrayInsert, null, 'registrar', 'terceros', ($i+1));
                         if ($validation['success'] === false) {
