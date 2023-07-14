@@ -271,7 +271,7 @@
                                 ]
                             ], Response::HTTP_BAD_REQUEST);
                         }
-                        $arrayData = explode(';', $lines[$i]);
+                        $arrayData = explode(',', $lines[$i]);
                         if(count($arrayData) !== 5) {
                             return response()->json([
                                 'message' => [
