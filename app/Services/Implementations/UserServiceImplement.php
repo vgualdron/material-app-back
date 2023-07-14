@@ -120,7 +120,7 @@
                         $sql->phone = $user['phone'];
                         $sql->yard = $user['yard'];
                         $sql->active = $user['active'];
-                        $sql->password = empty($user['password']) ? Hash::make($sql->password) : $user['password'];
+                        $sql->password = empty($user['password']) ? $sql->password : Hash::make($user['password']);
                         $sql->save();
                         $sql->roles()->detach();
                         $sql->assignRole($user['roles']);
