@@ -439,46 +439,46 @@ class RoleSeeder extends Seeder
 
         /*
             |--------------------------------------------------------------------------
-            | Locale Ticket permissions
+            | Local Ticket permissions
             |--------------------------------------------------------------------------
         */
         Permission::create([
-            'name' => 'localeTicket.list',
+            'name' => 'localTicket.list',
             'display_name' => 'Listar Tiquetes',
             'group' => 'Tiquetes (Offline)',
-            'route' => '/localeTicket',
+            'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
 
         Permission::create([
-            'name' => 'localeTicket.create',
+            'name' => 'localTicket.create',
             'display_name' => 'Crear Tiquete',
             'group' => 'Tiquetes (Offline)',
-            'route' => '/localeTicket',
+            'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
 
         Permission::create([
-            'name' => 'localeTicket.update',
+            'name' => 'localTicket.update',
             'display_name' => 'Actualizar Tiquete',
             'group' => 'Tiquetes (Offline)',
-            'route' => '/localeTicket',
+            'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
         
         Permission::create([
-            'name' => 'localeTicket.get',
+            'name' => 'localTicket.get',
             'display_name' => 'Consultar Tiquete',
             'group' => 'Tiquetes (Offline)',
-            'route' => '/localeTicket',
+            'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
 
         Permission::create([
-            'name' => 'localeTicket.delete',
+            'name' => 'localTicket.delete',
             'display_name' => 'Eliminar Tiquete',
             'group' => 'Tiquetes (Offline)',
-            'route' => '/localeTicket',
+            'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
         /*
