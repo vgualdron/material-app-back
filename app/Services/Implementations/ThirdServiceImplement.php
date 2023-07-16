@@ -271,7 +271,7 @@
                                 ]
                             ], Response::HTTP_BAD_REQUEST);
                         }
-                        $arrayData = explode(';', $lines[$i]);
+                        $arrayData = explode(',', $lines[$i]);
                         if(count($arrayData) !== 5) {
                             return response()->json([
                                 'message' => [
@@ -282,6 +282,7 @@
                                 ]
                             ], Response::HTTP_BAD_REQUEST);
                         }
+                        $arrayData = str_replace(array("SI", "NO"), array(1, 0), $arrayData);
                         array_unshift($arrayData, null);
                         array_push($arrayData, 1);
                         $arrayInsert = array_combine($header, $arrayData);
