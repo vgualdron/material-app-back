@@ -7,6 +7,7 @@
     use App\Traits\Commons;
     use App\Traits\Generals;
     use Illuminate\Support\Facades\{DB, Auth};
+    use DateTime;
 
     class TicketServiceImplement implements TicketServiceInterface {
 
@@ -24,18 +25,23 @@
             try {
                 $sql = $this->ticket->from('tickets as t')
                     ->select(
-                        DB::Raw('CASE type
-                                    WHEN "D" THEN "DESPACHO"
-                                    WHEN "R" THEN "RECEPCIÓN"
-                                    WHEN "C" THEN "COMPRA"
-                                    ELSE "VENTA"
-                                END as type'),
+                        't.id as id',
+                        DB::Raw('
+                            CASE t.type
+                                WHEN "D" THEN "DESPACHO"
+                                WHEN "R" THEN "RECEPCIÓN"
+                                WHEN "C" THEN "COMPRA"
+                                ELSE "VENTA"
+                            END as type'
+                        ),
+                        't.referral_number as referralNumber',
+                        't.receipt_number as receiptNumber',
                         DB::Raw('DATE_FORMAT(t.date, "%d/%m/%Y") as date'),
                         DB::Raw(
-                            '(CASE t.type
+                            'CASE t.type
                                 WHEN "C" THEN ts.name
                                 ELSE oy.name 
-                            END) as originYard'
+                            END as originYard'
                         ),
                         DB::Raw(
                             '(CASE t.type
@@ -61,7 +67,7 @@
                         'message' => [
                             [
                                 'text' => 'No hay tiquetes para mostrar',
-                                'detail' => 'Aun no ha registrado ningun tiquete'
+                                'detail' => 'Aún no ha registrado ningun tiquete'
                             ]
                         ]
                     ], Response::HTTP_NOT_FOUND);
@@ -81,6 +87,7 @@
 
         function create(array $ticket){
             try {
+                $ticket['user'] = Auth::id();
                 $validation = $this->validate($this->validator, $ticket, null, 'registrar', 'tiquete', null);
                 if ($validation['success'] === false) {
                     return response()->json([
@@ -89,10 +96,11 @@
                 }
                 $filled = $this->camelArrayFromModel($this->ticket);
                 $ticket = array_merge($filled, $ticket);
-                $consecutive = md5(Auth::id().'/'.date('Y-m-d h:i:s.v'));
+                $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+                $consecutive = md5(Auth::id().'/'.$now->format("m-d-Y H:i:s.u"));
                 $this->ticket::create([
                     'type' => $ticket['type'],
-                    'user' => Auth::id(),
+                    'user' => $ticket['user'],
                     'origin_yard' => $ticket['originYard'],
                     'destiny_yard' => $ticket['destinyYard'],
                     'supplier' => $ticket['supplier'],
@@ -138,14 +146,15 @@
 
         function update(array $ticket, int $id){
             try {
-                $validation = $this->validate($this->validator, $ticket, $id, 'actualizar', 'tiquete', null);
-                if ($validation['success'] === false) {
-                    return response()->json([
-                        'message' => $validation['message']
-                    ], Response::HTTP_BAD_REQUEST);
-                }
                 $sql = $this->ticket::find($id);
                 if(!empty($sql)) {
+                    $ticket['user'] = $sql->user;
+                    $validation = $this->validate($this->validator, $ticket, $id, 'actualizar', 'tiquete', null);
+                    if ($validation['success'] === false) {
+                        return response()->json([
+                            'message' => $validation['message']
+                        ], Response::HTTP_BAD_REQUEST);
+                    }
                     $filled = $this->camelArrayFromModel($this->ticket);
                     $ticket = array_merge($filled, $ticket);
                     $sql->type = $ticket['type'];
@@ -260,8 +269,7 @@
                     'ash_percentage as ashPercentage',
                     'receipt_number as receiptNumber',
                     'referral_number as referralNumber',
-                    DB::Raw("DATE_FORMAT(date, '%d/%m/%Y') as date"),
-                    'time',
+                    DB::Raw('CONCAT(DATE_FORMAT(date, "%d/%m/%Y"), " ", TIME_FORMAT(time, "%H:%i")) as dateTime'),
                     'license_plate as licensePlate',
                     'trailer_number as trailerNumber',
                     'driver_document as driverDocument',

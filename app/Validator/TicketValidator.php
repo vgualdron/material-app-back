@@ -17,6 +17,7 @@
         private function rules(){
             return[
                 'type' => 'required|in:D,R,C,V',
+                'user' => 'required|exists:users,id',
                 'date' => 'required|date',
                 'time' => 'required|date_format:H:i',
                 'licensePlate' => 'required|max:30',
@@ -60,6 +61,8 @@
             return [
                 'type.required' => 'El tipo de movimiento es requerido',
                 'type.in' => 'El tipo de movimiento debe corresponder a uno de los siguientes valores: D (Despacho), R (Recepción), C (Compra) o V (Venta)',
+                'user.required' => 'Debe indicar el usuario que registra el tiquete',
+                'user.exists' => 'El usuario ingresado no existe',
                 'date.required' => 'La fecha es requerida',
                 'date.date' => 'La fecha ingresada no tiene un formato válido',
                 'time.required' => 'La hora es requerida',

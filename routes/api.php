@@ -117,6 +117,5 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/ticket"], function () {
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/synchronization"], function () {
-    Route::post('/upload', [SynchronizationController::class, 'upload'])->middleware('can:synchronization.synchronize')->name('synchronization.upload');
-    Route::get('/download', [SynchronizationController::class, 'download'])->middleware('can:synchronization.synchronize')->name('synchronization.download');
+    Route::post('/synchronize', [SynchronizationController::class, 'synchronize'])->middleware('can:synchronization.synchronize')->name('synchronization.synchronize');
 });

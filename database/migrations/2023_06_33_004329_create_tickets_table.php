@@ -34,7 +34,7 @@ return new class extends Migration
             $table->double('net_weight', 10,2);
             $table->unsignedBigInteger('conveyor_company')->unsigned();
             $table->text('observation')->nullable()->collation('utf8_spanish_ci')->default(null);
-            $table->string('seals', 200)->nullable()->collation('utf8_spanish_ci')->default(null);
+            $table->string('seals', 500)->nullable()->collation('utf8_spanish_ci')->default('[]');
             $table->boolean('round_trip')->nullable()->default(0);
             $table->date('local_created_at')->nullable();
             $table->unsignedBigInteger('freight_settlement')->nullable()->unsigned();
@@ -63,6 +63,7 @@ return new class extends Migration
             $table->string('consecutive', 50)->nullable()->collation('utf8_spanish_ci');
             $table->unique(['type', 'referral_number'], 'type_referral_number');
             $table->unique(['type', 'receipt_number'], 'type_receipt_number');
+            $table->unique(['consecutive'], 'consecutive');
             $table->timestamps();
         });
     }

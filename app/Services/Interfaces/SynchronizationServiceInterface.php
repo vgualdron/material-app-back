@@ -3,7 +3,6 @@
     
     interface SynchronizationServiceInterface
     {
-        function upload(array $data);
-        function download();
+        function synchronize(array $data);
     }
 ?>
