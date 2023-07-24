@@ -4,6 +4,8 @@
     use Illuminate\Support\Facades\{Hash, Auth};
     use Symfony\Component\HttpFoundation\Response;
     use App\Models\{OauthClient, User, OauthAccessToken};
+    use Illuminate\Support\Facades\Artisan;
+
     class AuthServiceImplement implements AuthServiceInterface{
 
         private $oauthClient;
@@ -43,6 +45,8 @@
 
         function login(string $documentNumber, string $password){
             try {
+                Artisan::call('config:clear');
+                Artisan::call('optimize:clear');
                 $user = $this->user::where('document_number', $documentNumber)->first();
                 if (!empty($user)) {
                     if(Auth::attempt(['document_number' => $documentNumber, 'password' => $password])){
