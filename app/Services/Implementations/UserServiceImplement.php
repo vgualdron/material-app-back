@@ -79,7 +79,8 @@
                         'phone' => $user['phone'],
                         'active' => $user['active'],
                         'password' => empty($user['password']) ? Hash::make($user['documentNumber']) : Hash::make($user['password']),
-                        'yard' => $user['yard']
+                        'yard' => $user['yard'],
+                        'change_yard' => $user['changeYard']
                     ]);
     
                     $sql->assignRole($user['roles']);
@@ -121,6 +122,7 @@
                         $sql->yard = $user['yard'];
                         $sql->active = $user['active'];
                         $sql->password = empty($user['password']) ? $sql->password : Hash::make($user['password']);
+                        $sql->change_yard = $user['changeYard'];
                         $sql->save();
                         $sql->roles()->detach();
                         $sql->assignRole($user['roles']);
@@ -222,7 +224,8 @@
                     'yard',
                     'phone',
                     'active',
-                    'editable'
+                    'editable',
+                    'change_yard as changeYard'
                 )
                     ->where('id', $id)
                     ->first();

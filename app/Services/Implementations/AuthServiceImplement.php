@@ -49,52 +49,63 @@
                 Artisan::call('optimize:clear');
                 $user = $this->user::where('document_number', $documentNumber)->first();
                 if (!empty($user)) {
-                    if(Auth::attempt(['document_number' => $documentNumber, 'password' => $password])){
-                        $grantClient = $this->oauthClient->select('secret as key')
-                            ->where('password_client', 1)
-                            ->where('revoked', 0)
-                            ->first();
+                    if ($user->active === 1) {
+                        if(Auth::attempt(['document_number' => $documentNumber, 'password' => $password])){
+                            $grantClient = $this->oauthClient->select('secret as key')
+                                ->where('password_client', 1)
+                                ->where('revoked', 0)
+                                ->first();
 
-                        $grantClient = !empty($grantClient) ? $grantClient->key : null;
+                            $grantClient = !empty($grantClient) ? $grantClient->key : null;
 
-                        if (!empty($grantClient)) {
-                            $this->oauthAccessToken::where('user_id', '=', $user->id)
-                                ->delete();
-                            $token = $user->createToken($grantClient)->accessToken;
-                            $permissions = $user->getPermissionsViaRoles();
-                            $roles = $user->getRoleNames();
-                            $dataPermissions = [];
-                            $menu = [];
-                            foreach ($permissions as $permission) {
-                                $menu[] = [
-                                    'route' => $permission->route,
-                                    'name' => $permission->group,
-                                    'menu' => $permission->menu
-                                ];
-                                $dataPermissions[] = [
-                                    'name' => $permission->name,
-                                    'displayName' => $permission->display_name
-                                ];
+                            if (!empty($grantClient)) {
+                                $this->oauthAccessToken::where('user_id', '=', $user->id)
+                                    ->delete();
+                                $token = $user->createToken($grantClient)->accessToken;
+                                $permissions = $user->getPermissionsViaRoles();
+                                $roles = $user->getRoleNames();
+                                $dataPermissions = [];
+                                $menu = [];
+                                foreach ($permissions as $permission) {
+                                    $menu[] = [
+                                        'route' => $permission->route,
+                                        'name' => $permission->group,
+                                        'menu' => $permission->menu
+                                    ];
+                                    $dataPermissions[] = [
+                                        'name' => $permission->name,
+                                        'displayName' => $permission->display_name
+                                    ];
+                                }
+                                $userData = array(
+                                    'name' => $user->name,
+                                    'document' => $user->document_number,
+                                    'yard' => $user->change_yard.'-'.$user->yard,
+                                    'user' => $user->id
+                                );
+                                return response()->json([
+                                    'token' => $token,
+                                    'user' => $userData,
+                                    'permissions' => array_values(array_unique($dataPermissions, SORT_REGULAR)),
+                                    'menu' => array_values(array_unique($menu, SORT_REGULAR)),
+                                    'roles' => $roles
+                                ], Response::HTTP_OK);
+                            } else {
+                                return response()->json([
+                                    'message' => [
+                                        [
+                                            'text' => 'Error de autenticación',
+                                            'detail' => 'Se ha presentado un inconveniente al generar el token de sesión'
+                                        ]
+                                    ]
+                                ], Response::HTTP_NOT_FOUND);
                             }
-                            $userData = array(
-                                'name' => $user->name,
-                                'document' => $user->document_number,
-                                'yard' => $user->yard,
-                                'user' => $user->id
-                            );
-                            return response()->json([
-                                'token' => $token,
-                                'user' => $userData,
-                                'permissions' => array_values(array_unique($dataPermissions, SORT_REGULAR)),
-                                'menu' => array_values(array_unique($menu, SORT_REGULAR)),
-                                'roles' => $roles
-                            ], Response::HTTP_OK);
                         } else {
                             return response()->json([
                                 'message' => [
                                     [
                                         'text' => 'Error de autenticación',
-                                        'detail' => 'Se ha presentado un inconveniente al generar el token de sesión'
+                                        'detail' => 'La contraseña ingresada es incorrecta'
                                     ]
                                 ]
                             ], Response::HTTP_NOT_FOUND);
@@ -104,7 +115,7 @@
                             'message' => [
                                 [
                                     'text' => 'Error de autenticación',
-                                    'detail' => 'La contraseña ingresada es incorrecta'
+                                    'detail' => 'El usuario con el número de documento "'.$documentNumber.'" se encuentra inactivo'
                                 ]
                             ]
                         ], Response::HTTP_NOT_FOUND);

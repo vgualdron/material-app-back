@@ -20,6 +20,7 @@
                 'yard' => 'nullable|exists:yards,id',
                 'roles.*' => 'nullable|exists:roles,id',
                 'active' => 'required|boolean',
+                'changeYard' => 'required|boolean',
                 'password' => 'nullable|min:5|max:20|required_with:confirmPassword',
                 'confirmPassword' => 'nullable|same:password|required_with:password'
             ];
@@ -40,6 +41,8 @@
                 'yard.exists' => 'El patio seleccionado no existe',
                 'active.required' => 'Debe indicar si el usuario se encuentra activo o inactivo',
                 'active.boolean' => 'Debe usar alguno de los siguientes valores para indicar si el usuario se encuentra activo o no (true, false, 0, 1, "0" o "1")',
+                'changeYard.required' => 'Debe indicar si el usuario puede cambiar patios en tiquetes o no',
+                'changeYard.boolean' => 'Debe usar alguno de los siguientes valores para indicar si el usuario puede cambiar patios en tiquetes o no (true, false, 0, 1, "0" o "1")',
                 'password.min' => 'La contraseña debe tener un mínimo de 5 caracteres',
                 'password.max' => 'La contraseña debe tener un máximo de 20 caracteres',
                 'password.required_with' => 'Debe ingresar la contraseña',

@@ -137,7 +137,7 @@
                     'message' => [
                         [
                             'text' => 'Advertencia al registrar el tiquete',
-                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                            'detail' => /*'Si este problema persiste, contacte con un administrador'*/$e->getMessage()
                         ]
                     ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);

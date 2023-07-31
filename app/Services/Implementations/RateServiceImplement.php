@@ -92,30 +92,55 @@
                     ], Response::HTTP_BAD_REQUEST);
                 }
                 $rate = array_merge($filled, $rate);
-                $this->rate::create([
-                    'movement' => $rate['movement'],
-                    'origin_yard' => $rate['originYard'],
-                    'destiny_yard' => $rate['destinyYard'],
-                    'supplier' => $rate['supplier'],
-                    'customer' => $rate['customer'],
-                    'start_date' => $rate['startDate'],
-                    'final_date' => $rate['finalDate'],
-                    'material' => $rate['material'],
-                    'conveyor_company' => $rate['conveyorCompany'],
-                    'material_price' => $rate['materialPrice'],
-                    'freight_price' => $rate['freightPrice'],
-                    'total_price' => $rate['totalPrice'],
-                    'observation' => $rate['observation'],
-                    'round_trip' => !empty($rate['roundTrip']) ? $rate['roundTrip'] : 0
-                ]);
-                return response()->json([
-                    'message' => [
-                        [
-                            'text' => 'Tarifa registrada con éxito',
-                            'detail' => null
+                $exists = $this->rate->where('movement', '=', $rate['movement'])
+                                ->where('material', '=', $rate['material'])
+                                ->where('origin_yard', '=', $rate['originYard'])
+                                ->where('destiny_yard', '=', $rate['destinyYard'])
+                                ->where('supplier', '=', $rate['supplier'])
+                                ->where('customer', '=', $rate['customer'])
+                                ->where('conveyor_company', '=', $rate['conveyorCompany'])
+                                ->where('round_trip', '=', (empty($rate['roundTrip']) ? 0 : 1))
+                                ->where(function ($query) use ($rate){
+                                        $query->whereRaw('? BETWEEN start_date AND final_date', $rate['startDate'])
+                                            ->orWhereRaw('? BETWEEN start_date AND final_date', $rate['finalDate'])
+                                            ->orWhereRaw('start_date >= ? AND final_date <= ?', [$rate['startDate'], $rate['finalDate']]);
+                                })
+                                ->get();
+                if(count($exists) === 0) {
+                    $this->rate::create([
+                        'movement' => $rate['movement'],
+                        'origin_yard' => $rate['originYard'],
+                        'destiny_yard' => $rate['destinyYard'],
+                        'supplier' => $rate['supplier'],
+                        'customer' => $rate['customer'],
+                        'start_date' => $rate['startDate'],
+                        'final_date' => $rate['finalDate'],
+                        'material' => $rate['material'],
+                        'conveyor_company' => $rate['conveyorCompany'],
+                        'material_price' => $rate['materialPrice'],
+                        'freight_price' => $rate['freightPrice'],
+                        'total_price' => $rate['totalPrice'],
+                        'observation' => $rate['observation'],
+                        'round_trip' => !empty($rate['roundTrip']) ? $rate['roundTrip'] : 0
+                    ]);
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Tarifa registrada con éxito',
+                                'detail' => null
+                            ]
                         ]
-                    ]
-                ], Response::HTTP_OK);
+                    ], Response::HTTP_OK);
+                } else {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al registrar la tarifa',
+                                'detail' => 'Ya existe una tarifa con estas caracteristicas, que se cruzan con el rango de fechas ingresado'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
             } catch (\Throwable $e) {
                 return response()->json([
                     'message' => [
@@ -140,30 +165,55 @@
                 $sql = $this->rate::find($id);
                 if(!empty($sql)) {
                     $rate = array_merge($filled, $rate);
-                    $sql->movement = $rate['movement'];
-                    $sql->origin_yard = $rate['originYard'];
-                    $sql->destiny_yard = $rate['destinyYard'];
-                    $sql->supplier = $rate['supplier'];
-                    $sql->customer = $rate['customer'];
-                    $sql->start_date = $rate['startDate'];
-                    $sql->final_date = $rate['finalDate'];
-                    $sql->material = $rate['material'];
-                    $sql->conveyor_company = $rate['conveyorCompany'];
-                    $sql->material_price = $rate['materialPrice'];
-                    $sql->freight_price = $rate['freightPrice'];
-                    $sql->total_price = $rate['totalPrice'];
-                    $sql->observation = $rate['observation'];
-                    $sql->round_trip = !empty($rate['roundTrip']) ? $rate['roundTrip'] : 0;
-
-                    $sql->save();
-                    return response()->json([
-                        'message' => [
-                            [
-                                'text' => 'Tarifa actualizada con éxito',
-                                'detail' => null
+                    $exists = $this->rate->where('movement', '=', $rate['movement'])
+                        ->where('material', '=', $rate['material'])
+                        ->where('origin_yard', '=', $rate['originYard'])
+                        ->where('destiny_yard', '=', $rate['destinyYard'])
+                        ->where('supplier', '=', $rate['supplier'])
+                        ->where('customer', '=', $rate['customer'])
+                        ->where('conveyor_company', '=', $rate['conveyorCompany'])
+                        ->where('round_trip', '=', (empty($rate['roundTrip']) ? 0 : 1))
+                        ->where(function ($query) use ($rate){
+                                $query->whereRaw('? BETWEEN start_date AND final_date', $rate['startDate'])
+                                    ->orWhereRaw('? BETWEEN start_date AND final_date', $rate['finalDate'])
+                                    ->orWhereRaw('start_date >= ? AND final_date <= ?', [$rate['startDate'], $rate['finalDate']]);
+                        })
+                        ->where('id', '<>', $id)
+                        ->get();
+                    if(count($exists) === 0) {
+                        $sql->movement = $rate['movement'];
+                        $sql->origin_yard = $rate['originYard'];
+                        $sql->destiny_yard = $rate['destinyYard'];
+                        $sql->supplier = $rate['supplier'];
+                        $sql->customer = $rate['customer'];
+                        $sql->start_date = $rate['startDate'];
+                        $sql->final_date = $rate['finalDate'];
+                        $sql->material = $rate['material'];
+                        $sql->conveyor_company = $rate['conveyorCompany'];
+                        $sql->material_price = $rate['materialPrice'];
+                        $sql->freight_price = $rate['freightPrice'];
+                        $sql->total_price = $rate['totalPrice'];
+                        $sql->observation = $rate['observation'];
+                        $sql->round_trip = !empty($rate['roundTrip']) ? $rate['roundTrip'] : 0;
+                        $sql->save();
+                        return response()->json([
+                            'message' => [
+                                [
+                                    'text' => 'Tarifa actualizada con éxito',
+                                    'detail' => null
+                                ]
                             ]
-                        ]
-                    ], Response::HTTP_OK);
+                        ], Response::HTTP_OK);
+                    } else {
+                        return response()->json([
+                            'message' => [
+                                [
+                                    'text' => 'Advertencia al registrar la tarifa',
+                                    'detail' => 'Ya existe una tarifa con estas caracteristicas, que se cruzan con el rango de fechas ingresado'
+                                ]
+                            ]
+                        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                    }
                 } else {
                     return response()->json([
                         'message' => [

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('yard')->nullable();
             $table->boolean('active')->default(1);
             $table->boolean('editable')->default(1);
+            $table->boolean('change_yard')->default(0);
             $table->foreign('yard')->references('id')->on('yards');
             $table->timestamps();
         });

@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             "yard" => null,
             "editable" => 0,
             "active" => 1,
+            "change_yard" => 1,
             "password" => Hash::make('4dm1n')
         ])->assignRole('Administrador');
     }

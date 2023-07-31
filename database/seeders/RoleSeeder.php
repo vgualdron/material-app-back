@@ -481,6 +481,7 @@ class RoleSeeder extends Seeder
             'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
+
         /*
             |--------------------------------------------------------------------------
             | Synchronize permissions
@@ -493,6 +494,80 @@ class RoleSeeder extends Seeder
             'route' => '/synchronization',
             'guard_name' => 'api',
             'menu' => 0
+        ])->syncRoles([$adminRole]);
+
+        /*
+            |--------------------------------------------------------------------------
+            | Material settlement  permissions
+            |--------------------------------------------------------------------------
+        */
+        Permission::create([
+            'name' => 'materialSettlement.list',
+            'display_name' => 'Listar Liquidaciones',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'materialSettlement.settle',
+            'display_name' => 'Liquidar',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'materialSettlement.addInformation',
+            'display_name' => 'Agregar Información',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+        
+        Permission::create([
+            'name' => 'materialSettlement.get',
+            'display_name' => 'Consultar Liquidación',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        /*
+            |--------------------------------------------------------------------------
+            | Freight settlement  permissions
+            |--------------------------------------------------------------------------
+        */
+        Permission::create([
+            'name' => 'freightSettlement.list',
+            'display_name' => 'Listar Liquidaciones',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'freightSettlement.settle',
+            'display_name' => 'Liquidar',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'freightSettlement.addInformation',
+            'display_name' => 'Agregar Información',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+        
+        Permission::create([
+            'name' => 'freightSettlement.get',
+            'display_name' => 'Consultar Liquidación',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
     }
 }

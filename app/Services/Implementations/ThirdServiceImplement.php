@@ -49,6 +49,7 @@
                                 ->where('active', 1);
                         })->orWhereIn('id', $third);
                     })
+                    ->orderBy('name')
                     ->get();
 
                 if (count($sql) > 0){
