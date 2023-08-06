@@ -510,6 +510,22 @@ class RoleSeeder extends Seeder
         ])->syncRoles([$adminRole]);
 
         Permission::create([
+            'name' => 'materialSettlement.get',
+            'display_name' => 'Consultar Liquidación',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'materialSettlement.print',
+            'display_name' => 'Imprimir Liquidación',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
             'name' => 'materialSettlement.settle',
             'display_name' => 'Liquidar',
             'group' => 'Liquidación (Material)',
@@ -520,14 +536,6 @@ class RoleSeeder extends Seeder
         Permission::create([
             'name' => 'materialSettlement.addInformation',
             'display_name' => 'Agregar Información',
-            'group' => 'Liquidación (Material)',
-            'route' => '/materialSettlement',
-            'guard_name' => 'api'
-        ])->syncRoles([$adminRole]);
-        
-        Permission::create([
-            'name' => 'materialSettlement.get',
-            'display_name' => 'Consultar Liquidación',
             'group' => 'Liquidación (Material)',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
@@ -547,6 +555,22 @@ class RoleSeeder extends Seeder
         ])->syncRoles([$adminRole]);
 
         Permission::create([
+            'name' => 'freightSettlement.get',
+            'display_name' => 'Consultar Liquidación',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'freightSettlement.print',
+            'display_name' => 'Imprimir Liquidación',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
             'name' => 'freightSettlement.settle',
             'display_name' => 'Liquidar',
             'group' => 'Liquidación (Flete)',
@@ -557,14 +581,6 @@ class RoleSeeder extends Seeder
         Permission::create([
             'name' => 'freightSettlement.addInformation',
             'display_name' => 'Agregar Información',
-            'group' => 'Liquidación (Flete)',
-            'route' => '/freightSettlement',
-            'guard_name' => 'api'
-        ])->syncRoles([$adminRole]);
-        
-        Permission::create([
-            'name' => 'freightSettlement.get',
-            'display_name' => 'Consultar Liquidación',
             'group' => 'Liquidación (Flete)',
             'route' => '/freightSettlement',
             'guard_name' => 'api'

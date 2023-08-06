@@ -160,7 +160,8 @@
                             );
                         }
                         if(count($ticketsToDelete) > 0) {
-                            $this->ticket::whereIn('id', $ticketsToDelete)
+                            $ticketsToDeleteIds = array_column($ticketsToDelete, 'id');
+                            $this->ticket::whereIn('id', $ticketsToDeleteIds)
                                 ->delete();
                         }
                     });

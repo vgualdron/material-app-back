@@ -14,7 +14,9 @@ use App\Http\Controllers\{
                         AdjustmentController,
                         RateController,
                         TicketController,
-                        SynchronizationController
+                        SynchronizationController,
+                        MaterialSettlementController,
+                        FreightSettlementController
                     };
 
 /*
@@ -118,4 +120,22 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/ticket"], function () {
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/synchronization"], function () {
     Route::post('/synchronize', [SynchronizationController::class, 'synchronize'])->middleware('can:synchronization.synchronize')->name('synchronization.synchronize');
+});
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/materialSettlement"], function () {
+    Route::get('/list', [MaterialSettlementController::class, 'list'])->middleware('can:materialSettlement.list')->name('materialSettlement.list');
+    Route::get('/getTickets/{type}/{startDate}/{finalDate}/{third}/{material}/{materialType}', [MaterialSettlementController::class, 'getTickets'])->middleware('can:materialSettlement.settle')->name('materialSettlement.getTickets');
+    Route::post('/settle', [MaterialSettlementController::class, 'settle'])->middleware('can:materialSettlement.settle')->name('materialSettlement.settle');
+    Route::get('/print/{id}', [MaterialSettlementController::class, 'print'])->middleware('can:materialSettlement.print')->name('materialSettlement.print');
+    Route::get('/get/{id}', [MaterialSettlementController::class, 'get'])->middleware('can:materialSettlement.get')->name('materialSettlement.get');
+    Route::put('/addInformation/{id}', [MaterialSettlementController::class, 'addInformation'])->middleware('can:materialSettlement.addInformation')->name('materialSettlement.addInformation');
+});
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/freightSettlement"], function () {
+    Route::get('/list', [FreightSettlementController::class, 'list'])->middleware('can:freightSettlement.list')->name('freightSettlement.list');
+    Route::get('/getTickets/{startDate}/{finalDate}/{convenyorCompany}', [FreightSettlementController::class, 'getTickets'])->middleware('can:freightSettlement.settle')->name('FreightSettlementController.getTickets');
+    Route::post('/settle', [FreightSettlementController::class, 'settle'])->middleware('can:freightSettlement.settle')->name('freightSettlement.settle');
+    Route::get('/print/{id}', [FreightSettlementController::class, 'print'])->middleware('can:freightSettlement.print')->name('freightSettlement.print');
+    Route::get('/get/{id}', [FreightSettlementController::class, 'get'])->middleware('can:freightSettlement.get')->name('freightSettlement.get');
+    Route::put('/addInformation/{id}', [FreightSettlementController::class, 'addInformation'])->middleware('can:freightSettlement.addInformation')->name('freightSettlement.addInformation');
 });
