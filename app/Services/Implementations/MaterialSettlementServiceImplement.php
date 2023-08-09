@@ -233,7 +233,7 @@
                 return response()->json([
                     'message' => [
                         [
-                            'text' => 'Se ha presentado un error al cargar los tiquetes para liquidar',
+                            'text' => 'Se ha presentado un error al liquidar materiales',
                             'detail' => 'intente recargando la página'
                         ]
                     ]
