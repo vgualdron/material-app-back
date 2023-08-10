@@ -299,8 +299,6 @@
                     ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-
-            
         }
 
         function print(int $id) {

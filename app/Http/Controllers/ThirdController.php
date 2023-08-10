@@ -15,8 +15,8 @@ class ThirdController extends Controller
             $this->service = $service;
     }
 
-    function list(int $displayAll, string $type, string $third){
-        return $this->service->list($displayAll, $type, $third);
+    function list(int $displayAll, string $type, string $third, string $origin, string $startDate, string $finalDate){
+        return $this->service->list($displayAll, $type, $third, $origin, $startDate, $finalDate);
     }
 
     function create(){

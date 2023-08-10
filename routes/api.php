@@ -86,7 +86,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/material"], function ()
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/third"], function () {
-    Route::get('/list/{displayAll}/{type}/{third}', [ThirdController::class, 'list'])->middleware('can:third.list')->name('third.list');
+    Route::get('/list/{displayAll}/{type}/{third}/{origin}/{startDate}/{finalDate}', [ThirdController::class, 'list'])->middleware('can:third.list')->name('third.list');
     Route::post('/create', [ThirdController::class, 'create'])->middleware('can:third.create')->name('third.create');
     Route::post('/createInBatch', [ThirdController::class, 'createInBatch'])->middleware('can:third.createInBatch')->name('third.createInBatch');
     Route::put('/update/{id}', [ThirdController::class, 'update'])->middleware('can:third.update')->name('third.update');
