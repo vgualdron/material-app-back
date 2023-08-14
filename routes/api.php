@@ -16,7 +16,8 @@ use App\Http\Controllers\{
                         TicketController,
                         SynchronizationController,
                         MaterialSettlementController,
-                        FreightSettlementController
+                        FreightSettlementController,
+                        MovementController
                     };
 
 /*
@@ -138,4 +139,21 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/freightSettlement"], fu
     Route::get('/print/{id}', [FreightSettlementController::class, 'print'])->middleware('can:freightSettlement.print')->name('freightSettlement.print');
     Route::get('/get/{id}', [FreightSettlementController::class, 'get'])->middleware('can:freightSettlement.get')->name('freightSettlement.get');
     Route::put('/addInformation/{id}', [FreightSettlementController::class, 'addInformation'])->middleware('can:freightSettlement.addInformation')->name('freightSettlement.addInformation');
+});
+
+/*Route::group(['middleware' => 'auth:api' , "prefix" => "/report"], function () {
+    Route::get('/movementsReport/{movement}/{startDate}/{finalDate}/{originYard}/{destinyYard}/{material}', [ReportController::class, 'movements'])->middleware('can:report.movements')->name('report.movements');
+    Route::get('/yardStockReport/{date}', [ReportController::class, 'yardStock'])->middleware('can:report.yardStock')->name('report.yardStock');
+    Route::get('/completeTransfers/{startDate}/{finalDate}/{originYard}/{destinyYard}', [ReportController::class, 'completeTransfers'])->middleware('can:report.completeTransfers')->name('report.completeTransfers');
+    Route::get('/uncompleteTransfers/{startDate}/{finalDate}/{originYard}/{destinyYard}', [ReportController::class, 'uncompleteTransfers'])->middleware('can:report.uncompleteTransfers')->name('report.uncompleteTransfers');
+    Route::get('/unbilledPurchases/{startDate}/{finalDate}/{supplier}/{material}', [ReportController::class, 'unbilledPurchases'])->middleware('can:report.unbilledPurchases')->name('report.unbilledPurchases');
+    Route::get('/unbilledSales/{startDate}/{finalDate}/{customer}/{material}', [ReportController::class, 'unbilledSales'])->middleware('can:report.unbilledSales')->name('report.unbilledSales');
+    Route::get('/unbilledFreight/{startDate}/{finalDate}/{conveyorCompany}/{material}', [ReportController::class, 'unbilledFreight'])->middleware('can:report.unbilledFreight')->name('report.unbilledFreight');
+});*/
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/movement"], function () {
+    Route::get('/list', [MovementController::class, 'list'])->middleware('can:movement.list')->name('movement.list');
+    Route::get('/getTickets/{startDate}/{finalDate}', [MovementController::class, 'getTickets'])->middleware('can:movement.getTickets')->name('movement.getTickets');
+    Route::get('/create/{startDate}/{finalDate}/{tickets}', [MovementController::class, 'create'])->middleware('can:movement.create')->name('movement.create');
+    Route::get('/print/{id}', [MovementController::class, 'print'])->middleware('can:movement.print')->name('movement.print');
 });

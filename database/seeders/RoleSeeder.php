@@ -585,5 +585,103 @@ class RoleSeeder extends Seeder
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
+
+        /*
+            |--------------------------------------------------------------------------
+            | Reports  permissions
+            |--------------------------------------------------------------------------
+        */
+        Permission::create([
+            'name' => 'report.movementsReport',
+            'display_name' => 'Informe Movimientos',
+            'group' => 'Reporte',
+            'route' => '/report',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'report.yardStockReport',
+            'display_name' => 'Stock por patio',
+            'group' => 'Reporte',
+            'route' => '/report',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'report.completeTransfers',
+            'display_name' => 'Traslados completos',
+            'group' => 'Reporte',
+            'route' => '/report',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'report.uncompleteTransfers',
+            'display_name' => 'Traslados incompletos',
+            'group' => 'Reporte',
+            'route' => '/report',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'report.unbilledPurchases',
+            'display_name' => 'Compras no facturadas',
+            'group' => 'Reporte',
+            'route' => '/report',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'report.unbilledSales',
+            'display_name' => 'Ventas no facturadas',
+            'group' => 'Reporte',
+            'route' => '/report',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'report.unbilledFreight',
+            'display_name' => 'Fletes no facturados',
+            'group' => 'Reporte',
+            'route' => '/report',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        /*
+            |--------------------------------------------------------------------------
+            | Movement  permissions
+            |--------------------------------------------------------------------------
+        */
+        Permission::create([
+            'name' => 'movement.list',
+            'display_name' => 'Listar Movimientos',
+            'group' => 'Movimiento',
+            'route' => '/movement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'movement.create',
+            'display_name' => 'Crear Movimiento',
+            'group' => 'Movimiento',
+            'route' => '/movement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'movement.getTickets',
+            'display_name' => 'Consultar Tiquetes',
+            'group' => 'Movimiento',
+            'route' => '/movement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'movement.print',
+            'display_name' => 'Imprimir Movimiento',
+            'group' => 'Movimiento',
+            'route' => '/movement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
     }
 }
