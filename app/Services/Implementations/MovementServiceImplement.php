@@ -156,7 +156,6 @@
                     'data' => $movements
                 ], Response::HTTP_OK);
             } catch (\Throwable $e) {
-                dd($e->getMessage());
                 return response()->json([
                     'message' => [
                         [

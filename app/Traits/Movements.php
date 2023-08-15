@@ -102,16 +102,16 @@
         public function getTicketsById(array $tickets) {
             $transferTickets = $this->ticket::from('tickets as t1')
                 ->select(
-                    'oz.code as PREFIJO',
-                    'oy.code as CCOSTO',
-                    't1.referral_number as NUMERO',
+                    DB::Raw('REPLACE(oz.code, ";", "") as PREFIJO'),
+                    DB::Raw('REPLACE(oy.code, ";", "") as CCOSTO'),
+                    DB::Raw('REPLACE(t1.referral_number, ";", "") as NUMERO'),
                     DB::Raw('DATE_FORMAT(t1.date, "%d/%m/%Y") as FECHA'),
                     DB::Raw('"00" as ORIGEN'),
                     DB::Raw('"00" as DESTINO'),
-                    't1.license_plate as PLACA', 
-                    DB::Raw('CONCAT(oz.code, oy.code, om.code) as ART1'), 
+                    DB::Raw('REPLACE(t1.license_plate, ";", "") as PLACA'), 
+                    DB::Raw('REPLACE(CONCAT(oz.code, oy.code, om.code), ";", "") as ART1'), 
                     DB::Raw('"00" as BODEGA'),
-                    DB::Raw('CONCAT(dz.code,dy.code,dm.code) as ART2'),
+                    DB::Raw('REPLACE(CONCAT(dz.code,dy.code,dm.code), ";", "") as ART2'),
                     DB::Raw('"00" as BODEGA2'),
                     't1.gross_weight as BRUTO',
                     't1.tare_weight as TARA',
@@ -119,8 +119,8 @@
                     DB::Raw('0 as TARIFAC'),
                     't1.freight_settlement_unit_value as TARIFAT',
                     DB::Raw('"T" as TIPOES'),
-                    DB::Raw('TRIM(CONCAT(COALESCE(t1.observation, ""), "   ", COALESCE(t2.observation, ""))) as OBS'),
-                    DB::Raw('COALESCE(tcc.nit, "") as NITTRANS'),
+                    DB::Raw('REPLACE(TRIM(CONCAT(COALESCE(t1.observation, ""), "   ", COALESCE(t2.observation, ""))), ";", "") as OBS'),
+                    DB::Raw('REPLACE(COALESCE(tcc.nit, ""), ";", "") as NITTRANS'),
                     't1.id as TICKET',
                     'mv.consecutive as CONSECUTIVO'
                 )
@@ -142,14 +142,14 @@
             
             $purchaseSaleTickets = $this->ticket::from('tickets as t')
                 ->select(
-                    DB::Raw('IF(t.type = "C", dz.code, oz.code) as PREFIJO'),
-                    DB::Raw('IF(t.type = "C", dy.code, oy.code) as CCOSTO'), 
-                    DB::Raw('IF(t.type = "V", t.referral_number, t.receipt_number) as NUMERO'),
+                    DB::Raw('REPLACE(IF(t.type = "C", dz.code, oz.code), ";", "") as PREFIJO'),
+                    DB::Raw('REPLACE(IF(t.type = "C", dy.code, oy.code), ";", "") as CCOSTO'), 
+                    DB::Raw('REPLACE(IF(t.type = "V", t.referral_number, t.receipt_number), ";", "") as NUMERO'),
                     DB::Raw('DATE_FORMAT(t.date, "%d/%m/%Y") as FECHA'),
-                    DB::Raw('IF(t.type = "C", ts.name, "00") as ORIGEN'),
-                    DB::Raw('IF(t.type = "V", tc.name, "00") as DESTINO'),
-                    't.license_plate as PLACA',
-                    DB::Raw('CONCAT(IF(t.type = "C", dz.code, oz.code), IF(t.type = "C", dy.code, oy.code), m.code) as ART1'),
+                    DB::Raw('REPLACE(IF(t.type = "C", ts.name, "00"), ";", "") as ORIGEN'),
+                    DB::Raw('REPLACE(IF(t.type = "V", tc.name, "00"), ";", "") as DESTINO'),
+                    DB::Raw('REPLACE(t.license_plate, ";", "") as PLACA'), 
+                    DB::Raw('REPLACE(CONCAT(IF(t.type = "C", dz.code, oz.code), IF(t.type = "C", dy.code, oy.code), m.code), ";", "") as ART1'),
                     DB::Raw('"00" as BODEGA'),
                     DB::Raw('"00" as ART2'),
                     DB::Raw('"00" as BODEGA2'),
@@ -159,8 +159,8 @@
                     't.material_settlement_unit_value as TARIFAC',
                     DB::Raw('COALESCE(t.freight_settlement_unit_value, 0) as TARIFAT'),
                     DB::Raw('IF(type = "C", "E", "S") as TIPOES'),
-                    DB::Raw('COALESCE(t.observation, "") as OBS'),
-                    DB::Raw('COALESCE(tcc.nit, "") as NITTRANS'),
+                    DB::Raw('REPLACE(COALESCE(t.observation, ""), ";", "") as OBS'),
+                    DB::Raw('REPLACE(COALESCE(tcc.nit, ""), ";", "") as NITTRANS'),
                     't.id as TICKET',
                     'mv.consecutive as CONSECUTIVO'
                 )
