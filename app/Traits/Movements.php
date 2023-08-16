@@ -122,7 +122,7 @@
                     DB::Raw('REPLACE(TRIM(CONCAT(COALESCE(t1.observation, ""), "   ", COALESCE(t2.observation, ""))), ";", "") as OBS'),
                     DB::Raw('REPLACE(COALESCE(tcc.nit, ""), ";", "") as NITTRANS'),
                     't1.id as TICKET',
-                    'mv.consecutive as CONSECUTIVO'
+                    'mv.id as CONSECUTIVO'
                 )
                 ->join('tickets as t2', function($join){
                     $join->on('t1.referral_number', '=', 't2.referral_number');
@@ -162,7 +162,7 @@
                     DB::Raw('REPLACE(COALESCE(t.observation, ""), ";", "") as OBS'),
                     DB::Raw('REPLACE(COALESCE(tcc.nit, ""), ";", "") as NITTRANS'),
                     't.id as TICKET',
-                    'mv.consecutive as CONSECUTIVO'
+                    'mv.id as CONSECUTIVO'
                 )
                 ->leftJoin('thirds as ts', 't.supplier', 'ts.id')
                 ->leftJoin('thirds as tc', 't.customer', 'tc.id')

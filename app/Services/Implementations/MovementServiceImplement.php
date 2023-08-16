@@ -28,7 +28,7 @@
             try {
                 $movements = $this->movement::select(
                     'id',
-                    'consecutive',
+                    'id as consecutive',
                     DB::Raw('DATE_FORMAT(created_at, "%d/%m/%Y") as date'),
                     DB::Raw('DATE_FORMAT(start_date, "%d/%m/%Y") as startDate'),
                     DB::Raw('DATE_FORMAT(final_date, "%d/%m/%Y") as finalDate')
@@ -91,7 +91,7 @@
                         ],
                         'movement' => [
                             'id' => $movementId,
-                            'consecutive' => $movementConsecutive
+                            'consecutive' => $movementId
                         ]
                     ], Response::HTTP_OK);
                 } else {
