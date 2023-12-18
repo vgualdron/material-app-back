@@ -116,6 +116,43 @@
             }
         }
 
+        function delete(int $id){
+            try {
+                $movement = $this->movement::find($id);
+                if (is_null($movement)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al eliminar el movimiento',
+                                'detail' => 'El movimiento seleccionado, no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+                DB::transaction(function () use ($id, $movement) {
+                    $this->movementTicket::where('movement', $id)->delete();
+                    $movement->delete();
+                });
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Movimiento eliminado con éxito',
+                            'detail' => null
+                        ]
+                    ]
+                ], Response::HTTP_OK);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al eliminar el movimiento',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
         function getTickets(string $startDate, string $finalDate){
             try {
                 $data = $this->getTicketsByDate($startDate, $finalDate);

@@ -24,6 +24,11 @@ class MovementController extends Controller
         return $this->service->create($startDate, $finalDate, $tickets);
     }
 
+    function delete(int $id){
+        return $this->service->delete($id);
+    }
+
+
     function print(int $id){
         return $this->service->print($id);
     }

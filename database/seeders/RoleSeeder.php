@@ -534,6 +534,22 @@ class RoleSeeder extends Seeder
         ])->syncRoles([$adminRole]);
 
         Permission::create([
+            'name' => 'materialSettlement.update',
+            'display_name' => 'Actualizar Liquidación',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'materialSettlement.delete',
+            'display_name' => 'Eliminar Liquidación',
+            'group' => 'Liquidación (Material)',
+            'route' => '/materialSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
             'name' => 'materialSettlement.addInformation',
             'display_name' => 'Agregar Información',
             'group' => 'Liquidación (Material)',
@@ -573,6 +589,22 @@ class RoleSeeder extends Seeder
         Permission::create([
             'name' => 'freightSettlement.settle',
             'display_name' => 'Liquidar',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'freightSettlement.update',
+            'display_name' => 'Actualizar Liquidación',
+            'group' => 'Liquidación (Flete)',
+            'route' => '/freightSettlement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'freightSettlement.delete',
+            'display_name' => 'Eliminar Liquidación',
             'group' => 'Liquidación (Flete)',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
@@ -663,6 +695,14 @@ class RoleSeeder extends Seeder
         Permission::create([
             'name' => 'movement.create',
             'display_name' => 'Crear Movimiento',
+            'group' => 'Movimiento',
+            'route' => '/movement',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'movement.delete',
+            'display_name' => 'Eliminar Movimiento',
             'group' => 'Movimiento',
             'route' => '/movement',
             'guard_name' => 'api'
