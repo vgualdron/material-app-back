@@ -94,7 +94,8 @@
                     foreach ($ticketsToSaveOrUpdate as $ticket) {
                         $validation = $this->validate($this->validator, $ticket, $ticket['id'], (empty($ticket['id']) ? 'registrar' : 'actualizar'), 'tiquete', null);
                         if ($validation['success'] === false) {
-                            $arrayWarnings[empty($ticket['id']) ? 'tc' : 'tu'][] = array_merge($arrayWarnings[empty($ticket['id']) ? 'tc' : 'tu'], $validation['message']);
+                            $validationMessage = $validation['message'][0]['detail'];
+                            $arrayWarnings[empty($ticket['id']) ? 'tc' : 'tu'][] = $validationMessage;
                         } else {
                             $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
                             $finalTicketsToSaveOrUpdate[] = [
@@ -237,7 +238,7 @@
                     'warnings' => $arrayWarnings
                 ], Response::HTTP_OK);
             } catch (\Throwable $e) {
-                //dd($e->getMessage().' '.$e->getLine());
+                dd($e->getMessage().' '.$e->getLine());
                 return response()->json([
                     'message' => [
                         [
