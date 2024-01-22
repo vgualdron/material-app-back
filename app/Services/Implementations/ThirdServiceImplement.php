@@ -2,32 +2,54 @@
     namespace App\Services\Implementations;
     use App\Services\Interfaces\ThirdServiceInterface;
     use Symfony\Component\HttpFoundation\Response;
-    use App\Models\Third;
+    use App\Models\{ Third, Ticket };
     use App\Validator\ThirdValidator;
     use App\Validator\ThirdFileValidator;
     use App\Validator\ThirdBasicValidator;
     use App\Traits\Commons;
+    use Illuminate\Support\Facades\DB;
     
     class ThirdServiceImplement implements ThirdServiceInterface {
 
         use Commons;
 
         private $third;
+        private $ticket;
         private $validator;
         private $fileValidator;
         private $basicValidator;
 
         function __construct(ThirdValidator $validator, ThirdFileValidator $fileValidator, ThirdBasicValidator $basicValidator){
             $this->third = new Third;
+            $this->ticket = new Ticket;
             $this->validator = $validator;
             $this->fileValidator = $fileValidator;
             $this->basicValidator = $basicValidator;
         }    
 
-        function list(int $displayAll, string $type, string $third){
+        function list(int $displayAll, string $type, string $third, string $origin, string $startDate, string $finalDate){
             try {
                 $type = urldecode($type) === 'CU' ? 'customer' : (urldecode($type) === 'AS' ? 'associated' : (urldecode($type) === 'CO' ? 'contractor' : null));
                 $third = explode(',', $third);
+                $origin = !empty(trim(urldecode($origin))) ? $origin : null;
+                $startDate = urldecode($startDate);
+                $finalDate = explode(',', $finalDate);
+                //get pendings conveyors to settle
+                if ($origin === 'FS') {
+                    $conveyors = $this->ticket::select(DB::Raw('GROUP_CONCAT(DISTINCT conveyor_company) as ids'))
+                        ->whereBetween('date', [$startDate, $finalDate])
+                        ->where(function ($query) {
+                            $query->where('type', 'D')
+                                ->orWhere('type', 'C')
+                                ->orWhere('type', 'V');
+                        })
+                        ->whereNull('freight_settlement')
+                        ->whereNotNull('conveyor_company')
+                        ->first();
+                    if($conveyors !== null) {
+                        $third = explode(',', $conveyors->ids);
+                    }
+                }
                 $sql = $this->third->select(
                     'id',
                     'nit',
@@ -38,16 +60,19 @@
                     'contractor',
                     'active'
                 )
-                    ->when($displayAll === 0 && $type === null, function ($query) use ($third)  {
+                    ->when($displayAll === 0 && $type === null && $origin === null, function ($query) use ($third)  {
                         return $query->where('active', 1)
                             ->orWhereIn('id', $third);
                             
                     })
-                    ->when($displayAll === 0 && $type !== null, function ($query) use ($type, $third)  {
+                    ->when($displayAll === 0 && $type !== null && $origin === null, function ($query) use ($type, $third)  {
                         return $query->where(function ($query) use($type) {
                             $query->where($type, 1)
                                 ->where('active', 1);
                         })->orWhereIn('id', $third);
+                    })
+                    ->when($origin !== null, function ($query) use ($third)  {
+                        return $query->whereIn('id', $third);
                     })
                     ->orderBy('name')
                     ->get();
@@ -67,6 +92,7 @@
                     ], Response::HTTP_NOT_FOUND);
                 }
             } catch (\Throwable $e) {
+                //dd($e->getMessage());
                 return response()->json([
                     'message' => [
                         [

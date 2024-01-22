@@ -3,7 +3,7 @@
     use App\Services\Interfaces\FreightSettlementServiceInterface;
     use Symfony\Component\HttpFoundation\Response;
     use App\Validator\SettlementAditionalInformationValidator;
-    use App\Models\{ Ticket, Settlement };
+    use App\Models\{ Ticket, Settlement, Movement };
     use App\Traits\{ Commons, Settlements };
     use Illuminate\Support\Facades\DB;
     
@@ -13,11 +13,13 @@
 
         private $ticket;
         private $settlement;
+        private $movement;
         private $validator;
 
         function __construct(SettlementAditionalInformationValidator $validator){
             $this->ticket = new Ticket;
             $this->settlement = new Settlement;
+            $this->movement = new Movement;
             $this->validator =  $validator;
         }    
 
@@ -179,7 +181,11 @@
                     ->where('t.conveyor_company', '=', $conveyorCompany)
                     ->whereBetween('t.date', [$startDate, $finalDate]);
                 
-                $tickets = $transferTickets->union($saleTickets)->union($purchaseTickets)->get();
+                $tickets = $transferTickets
+                    ->union($saleTickets)
+                    ->union($purchaseTickets)
+                    ->orderBy('date', 'ASC')
+                    ->get();
                 
                 if (count($tickets) > 0) {
                     return response()->json([
@@ -293,14 +299,12 @@
                 return response()->json([
                     'message' => [
                         [
-                            'text' => 'Se ha presentado un error al cargar los tiquetes para liquidar',
+                            'text' => 'Se ha presentado un error al liquidar fletes',
                             'detail' => 'intente recargando la página'
                         ]
                     ]
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-
-            
         }
 
         function print(int $id) {
@@ -413,6 +417,287 @@
                     'message' => [
                         [
                             'text' => 'Advertencia al actualizar información de liquidación',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function validateMovements(int $id){
+            try {
+                $settlement = $this->settlement::select(
+                    'id',
+                    'consecutive',
+                    'observation',
+                    DB::Raw('FORMAT(retentions_percentage, 2)'),
+                    DB::Raw('FORMAT(unit_royalties, 2)'),
+                    'start_date',
+                    'final_date',
+                    'third'
+                )
+                ->where('id', $id)
+                ->first();
+                if (!empty($settlement)) {
+                    $tickets = $this->ticket->select('id')
+                        ->where('freight_settlement', $id)
+                        ->get()
+                        ->toArray();
+                    if (count($tickets) > 0) {
+                        $ticketIds = array_column($tickets, 'id');
+                        $movements = $this->movement->from('movements as m')
+                            ->select('m.id')
+                            ->join('movements_tickets as mt', 'm.id', 'mt.movement')
+                            ->whereIn('mt.ticket', $ticketIds)
+                            ->distinct()
+                            ->get()
+                            ->toArray();
+                        $movementIds = array_column($movements, 'id');
+                        return response()->json([
+                           'data' => $movementIds
+                        ], Response::HTTP_OK);
+                    } else {
+                        return response()->json([
+                            'message' => [
+                                [
+                                    'text' => 'Advertencia al validar movimientos',
+                                    'detail' => 'Esta liquidación no tiene tiquetes asociados'
+                                ]
+                            ]
+                        ], Response::HTTP_NOT_FOUND);
+                    }
+                } else {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al validar movimientos',
+                                'detail' => 'La liquidación seleccionada no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al validar movimientos',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function getSettledTickets(int $id) {
+            try {
+                $settlement = $this->settlement::find($id);
+                if(empty($settlement)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'No se ha podido obtener la información de la liquidación',
+                                'detail' => 'Esta liquidación no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+                $tickets = $this->ticket::from('tickets as t')->select(
+                    't.id as id',
+                    DB::Raw('IF(t.type = "D", "T", t.type) as type'),
+                    DB::Raw('CASE t.type
+                        WHEN "C" THEN "COMPRA"
+                        WHEN "V" THEN "VENTA"
+                        ELSE "TRASLADO"
+                    END as typeName'),
+                    DB::Raw('FORMAT(IF(t.freight_settle_receipt_weight = 0, 0, t.freight_weight_settled), 2) as auxNetWeight'),
+                    'tcc.name as conveyorCompany',
+                    DB::Raw('DATE_FORMAT(t.date, "%d/%m/%Y") as date'),
+                    DB::Raw('IF(t.type = "V", tc.name,  dy.name) as destinyYard'),
+                    DB::Raw('FORMAT(t.freight_settlement_unit_value, 2) as freightPrice'),
+                    'm.name as material',
+                    'm.unit as materialUnit',
+                    DB::Raw('FORMAT(t.freight_settlement_net_value, 2) as netPrice'),
+                    DB::Raw('FORMAT(t.net_weight, 2) as netWeight'),
+                    DB::Raw('IF(t.type = "C", ts.name,  oy.name) as originYard'),
+                    DB::Raw('FORMAT(IF(t.type = "D", t2.net_weight, 0), 2) as originalAuxNetWeight'),
+                    DB::Raw('IF(t.type = "D", t2.receipt_number, COALESCE(t.receipt_number, "")) as receiptNumber'),
+                    DB::Raw('COALESCE(t.referral_number, "") as referralNumber'),
+                    DB::Raw('IF(t2.round_trip = 1, t2.round_trip, t.round_trip) as roundTrip'),
+                    't.freight_settle_receipt_weight as settleReceiptWeight'
+                )
+                ->leftJoin('tickets as t2', function($join) {
+                    $join->on('t.referral_number', 't2.referral_number');
+                    $join->on('t2.type', DB::raw('"R"'));
+                })
+                ->join('materials as m', 't.material', '=', 'm.id')
+                ->leftJoin('thirds as ts', 't.supplier', '=', 'ts.id')
+                ->leftJoin('thirds as tc', 't.customer', '=', 'tc.id')
+                ->leftJoin('thirds as tcc', 't.conveyor_company', 'tcc.id')
+                ->leftJoin('yards as oy', 't.origin_yard', '=', 'oy.id')
+                ->leftJoin('yards as dy', 't.destiny_yard', '=', 'dy.id')
+                ->whereIn('t.type', ['C', 'V', 'D'])
+                ->where('t.freight_settlement', $id)
+                ->orderBy('t.date', 'ASC')
+                ->get();
+                
+                $settlement = [
+                    'id' => $settlement->id,
+                    'consecutive' => $settlement->consecutive,
+                    'observation' => $settlement->observation,
+                    'retention' => $settlement->retentions_percentage,
+                    'startDateSettled' => $settlement->start_date,
+                    'finalDateSettled' => $settlement->final_date,
+                    'thirdSettled' => $settlement->third
+                ];
+
+                $data = [
+                    'tickets' => $tickets,
+                    'settlement' => $settlement
+                ];
+
+                return response()->json([
+                    'data' => $data
+                 ], Response::HTTP_OK);
+            } catch (\Throwable $e) {
+                dd($e);
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al obtener los tiquetes de la liquidación',
+                            'detail' => 'intente recargando la página'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function update(array $data, int $id) {
+            try {
+                $settlement = $this->settlement::find($id);
+                if(empty($settlement)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'No se ha podido obtener la información de la liquidación',
+                                'detail' => 'Esta liquidación no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+                if(count($data) === 0) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'No se ha podido actualizar la liquidación',
+                                'detail' => 'Faltan datos para completar el proceso'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+                $tickets = $data['tickets'];
+                $ticketIds = array_column($tickets, 'id');
+                $ticketsToUpdate = $this->ticket::whereIn('id', $ticketIds)
+                    ->get()
+                    ->toArray();
+                if(count($ticketsToUpdate) === 0) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'No se ha podido actualizar la liquidación',
+                                'detail' => 'No se han proporcionado datos de tiquetes'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+                $settlementToPrint = [];
+                $settlement->subtotal_amount = $data['weightSubtotal'];
+                $settlement->subtotal_settlement = $data['settledSubtotal'];
+                $settlement->retentions_percentage = $data['retentionPercentage'];
+                $settlement->retentions = $data['retention'];
+                $settlement->total_settle = $data['totalSettled'];
+                $settlement->observation = $data['observation'];
+                foreach ($ticketsToUpdate as $index => $ticket) {
+                    $key = array_search($ticket['id'], array_column($tickets, 'id'));
+                    if($key !== false) {
+                        $ticketsToUpdate[$index]['freight_settlement_retention_percentage'] = $data['retentionPercentage'];
+                        $ticketsToUpdate[$index]['freight_settlement_unit_value'] = $tickets[$key]['unitValue'];
+                        $ticketsToUpdate[$index]['freight_settlement_net_value'] = $tickets[$key]['netValue'];
+                        $ticketsToUpdate[$index]['freight_settle_receipt_weight'] = $tickets[$key]['settleReceiptWeight'];
+                        $ticketsToUpdate[$index]['freight_weight_settled'] = $tickets[$key]['weightSettled'];
+                    }
+                }
+                DB::transaction(function () use($settlement, $ticketsToUpdate) {
+                    $settlement->save();
+                    $this->ticket::upsert($ticketsToUpdate,
+                        ['id'], [
+                            'freight_settlement_retention_percentage',
+                            'freight_settlement_unit_value',
+                            'freight_settlement_net_value',
+                            'freight_settle_receipt_weight',
+                            'freight_weight_settled'
+                        ]
+                    );
+                });
+                $settlementToPrint = $this->getSettlementToPrint($id);
+                return response()->json([
+                    'data' => $settlementToPrint,
+                    'message' => [
+                        [
+                            'text' => 'Actualización finalizada con éxito',
+                            'detail' => null
+                        ]
+                    ]
+                ], Response::HTTP_OK);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al actualizar la liquidación',
+                            'detail' => /*'Si este problema persiste, contacte con un administrador'*/$e->getMessage()
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function delete(int $id) {
+            try {
+                $settlement = $this->settlement::find($id);
+                if(is_null($settlement)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'No se ha podido obtener la información de la liquidación',
+                                'detail' => 'Esta liquidación no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+                DB::transaction(function () use($id, $settlement) {
+                    $this->ticket::where('freight_settlement', $id)
+                    ->update([
+                        'freight_settlement' => null,
+                        'freight_settlement_retention_percentage' => 0,
+                        'freight_settlement_unit_value' => 0,
+                        'freight_settlement_net_value' => 0,
+                        'freight_settle_receipt_weight' => 0,
+                        'freight_weight_settled' => 0
+                    ]);
+                    $settlement->delete();
+                });
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Liquidación eliminada con éxito',
+                            'detail' => null
+                        ]
+                    ]
+                ], Response::HTTP_OK);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Se ha presentado un error al eliminar la liquidación',
                             'detail' => 'Si este problema persiste, contacte con un administrador'
                         ]
                     ]

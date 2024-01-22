@@ -16,7 +16,9 @@ use App\Http\Controllers\{
                         TicketController,
                         SynchronizationController,
                         MaterialSettlementController,
-                        FreightSettlementController
+                        FreightSettlementController,
+                        ReportController,
+                        MovementController
                     };
 
 /*
@@ -86,7 +88,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/material"], function ()
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/third"], function () {
-    Route::get('/list/{displayAll}/{type}/{third}', [ThirdController::class, 'list'])->middleware('can:third.list')->name('third.list');
+    Route::get('/list/{displayAll}/{type}/{third}/{origin}/{startDate}/{finalDate}', [ThirdController::class, 'list'])->middleware('can:third.list')->name('third.list');
     Route::post('/create', [ThirdController::class, 'create'])->middleware('can:third.create')->name('third.create');
     Route::post('/createInBatch', [ThirdController::class, 'createInBatch'])->middleware('can:third.createInBatch')->name('third.createInBatch');
     Route::put('/update/{id}', [ThirdController::class, 'update'])->middleware('can:third.update')->name('third.update');
@@ -129,6 +131,11 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/materialSettlement"], f
     Route::get('/print/{id}', [MaterialSettlementController::class, 'print'])->middleware('can:materialSettlement.print')->name('materialSettlement.print');
     Route::get('/get/{id}', [MaterialSettlementController::class, 'get'])->middleware('can:materialSettlement.get')->name('materialSettlement.get');
     Route::put('/addInformation/{id}', [MaterialSettlementController::class, 'addInformation'])->middleware('can:materialSettlement.addInformation')->name('materialSettlement.addInformation');
+    Route::get('/getTickets/{id}', [MaterialSettlementController::class, 'getData'])->name('materialSettlement.getData');
+    Route::get('/validateMovements/{id}', [MaterialSettlementController::class, 'validateMovements'])->name('materialSettlement.validateMovements');
+    Route::put('/update/{id}', [MaterialSettlementController::class, 'update'])->middleware('can:materialSettlement.update')->name('materialSettlement.update');
+    Route::delete('/delete/{id}', [MaterialSettlementController::class, 'delete'])->middleware('can:materialSettlement.delete')->name('materialSettlement.delete');
+    Route::get('/getSettledTickets/{id}', [MaterialSettlementController::class, 'getSettledTickets'])->name('materialSettlement.getSettledTickets');
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/freightSettlement"], function () {
@@ -138,4 +145,27 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/freightSettlement"], fu
     Route::get('/print/{id}', [FreightSettlementController::class, 'print'])->middleware('can:freightSettlement.print')->name('freightSettlement.print');
     Route::get('/get/{id}', [FreightSettlementController::class, 'get'])->middleware('can:freightSettlement.get')->name('freightSettlement.get');
     Route::put('/addInformation/{id}', [FreightSettlementController::class, 'addInformation'])->middleware('can:freightSettlement.addInformation')->name('freightSettlement.addInformation');
+    Route::get('/getTickets/{id}', [FreightSettlementController::class, 'getData'])->name('freightSettlement.getData');
+    Route::get('/validateMovements/{id}', [FreightSettlementController::class, 'validateMovements'])->name('freightSettlement.validateMovements');
+    Route::put('/update/{id}', [FreightSettlementController::class, 'update'])->middleware('can:freightSettlement.update')->name('freightSettlement.update');
+    Route::delete('/delete/{id}', [FreightSettlementController::class, 'delete'])->middleware('can:freightSettlement.delete')->name('freightSettlement.delete');
+    Route::get('/getSettledTickets/{id}', [FreightSettlementController::class, 'getSettledTickets'])->name('freightSettlement.getSettledTickets');
+});
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/report"], function () {
+    Route::get('/movements/{movement}/{startDate}/{finalDate}/{originYard}/{destinyYard}/{material}', [ReportController::class, 'movements'])->middleware('can:report.movements')->name('report.movements');
+    Route::get('/yardStock/{date}', [ReportController::class, 'yardStock'])->middleware('can:report.yardStock')->name('report.yardStock');
+    Route::get('/completeTransfers/{startDate}/{finalDate}/{originYard}/{destinyYard}', [ReportController::class, 'completeTransfers'])->middleware('can:report.completeTransfers')->name('report.completeTransfers');
+    Route::get('/uncompleteTransfers/{startDate}/{finalDate}/{originYard}/{destinyYard}', [ReportController::class, 'uncompleteTransfers'])->middleware('can:report.uncompleteTransfers')->name('report.uncompleteTransfers');
+    Route::get('/unbilledPurchases/{startDate}/{finalDate}/{supplier}/{material}', [ReportController::class, 'unbilledPurchases'])->middleware('can:report.unbilledPurchases')->name('report.unbilledPurchases');
+    Route::get('/unbilledSales/{startDate}/{finalDate}/{customer}/{material}', [ReportController::class, 'unbilledSales'])->middleware('can:report.unbilledSales')->name('report.unbilledSales');
+    Route::get('/unbilledFreights/{startDate}/{finalDate}/{conveyorCompany}/{material}', [ReportController::class, 'unbilledFreights'])->middleware('can:report.unbilledFreights')->name('report.unbilledFreights');
+});
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/movement"], function () {
+    Route::get('/list', [MovementController::class, 'list'])->middleware('can:movement.list')->name('movement.list');
+    Route::get('/getTickets/{startDate}/{finalDate}', [MovementController::class, 'getTickets'])->middleware('can:movement.getTickets')->name('movement.getTickets');
+    Route::get('/create/{startDate}/{finalDate}/{tickets}', [MovementController::class, 'create'])->middleware('can:movement.create')->name('movement.create');
+    Route::delete('/delete/{id}', [MovementController::class, 'delete'])->middleware('can:movement.delete')->name('movement.delete');
+    Route::get('/print/{id}', [MovementController::class, 'print'])->middleware('can:movement.print')->name('movement.print');
 });

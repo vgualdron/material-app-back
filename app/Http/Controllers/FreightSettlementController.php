@@ -35,7 +35,24 @@ class FreightSettlementController extends Controller
         return $this->service->get($id);
     }
 
+    function update(int $id) {
+        return $this->service->update($this->request->all(), $id);
+    }
+
     function addInformation(int $id){
         return $this->service->addInformation($this->request->all(), $id);
+    }
+
+    
+    function validateMovements(int $id) {
+        return $this->service->validateMovements($id);
+    }
+
+    function getSettledTickets(int $id) {
+        return $this->service->getSettledTickets($id);
+    }
+
+    function delete(int $id) {
+        return $this->service->delete($id);
     }
 }

@@ -50,7 +50,6 @@ return new class extends Migration
             $table->boolean('freight_settle_receipt_weight')->default(0);
             $table->double('freight_weight_settled', 15,2)->default(0);
             $table->double('material_weight_settled', 15,2)->default(0);
-            $table->unsignedBigInteger('ticketmovid')->nullable()->unsigned();
             $table->foreign('user')->references('id')->on('users');
             $table->foreign('origin_yard')->references('id')->on('yards');
             $table->foreign('destiny_yard')->references('id')->on('yards');
