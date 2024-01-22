@@ -66,15 +66,11 @@
                                 $roles = $user->getRoleNames();
                                 $dataPermissions = [];
                                 $menu = [];
-                                $menuV2 = [];
                                 foreach ($permissions as $permission) {
                                     $menu[] = [
                                         'route' => $permission->route,
                                         'name' => $permission->group,
-                                        'menu' => $permission->menu,
-                                    ];
-                                    $menuV2[] = [
-                                        $permission
+                                        'menu' => $permission->menu
                                     ];
                                     $dataPermissions[] = [
                                         'name' => $permission->name,
@@ -92,7 +88,6 @@
                                     'user' => $userData,
                                     'permissions' => array_values(array_unique($dataPermissions, SORT_REGULAR)),
                                     'menu' => array_values(array_unique($menu, SORT_REGULAR)),
-                                    'menuV2' => array_values(array_unique($menuV2, SORT_REGULAR)),
                                     'roles' => $roles
                                 ], Response::HTTP_OK);
                             } else {
