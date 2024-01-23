@@ -19,7 +19,8 @@ class Permission extends Model
         'display_name',
         'group',
         'route',
-        'menu'
+        'menu',
+        'group_id',
     ];
 
     /**

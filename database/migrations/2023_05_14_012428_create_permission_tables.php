@@ -33,8 +33,9 @@ class CreatePermissionTables extends Migration
             $table->string('group', 125); // For MySQL 8.0 use string('guard_name', 125);
             $table->string('route', 125); // For MySQL 8.0 use string('guard_name', 125);
             $table->boolean('menu')->default(1);
+            $table->unsignedBigInteger('group_id')->default(1);
             $table->timestamps();
-
+            $table->foreign('group_id')->references('id')->on('groups');
             $table->unique(['name', 'guard_name']);
         });
 
