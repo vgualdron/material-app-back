@@ -25,6 +25,7 @@ class RoleSeeder extends Seeder
             'name' => 'zone.list',
             'display_name' => 'Listar Zonas',
             'group' => 'Zonas',
+            'group_id' => '1',
             'route' => '/zone',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -33,6 +34,7 @@ class RoleSeeder extends Seeder
             'name' => 'zone.create',
             'display_name' => 'Crear Zona',
             'group' => 'Zonas',
+            'group_id' => '1',
             'route' => '/zone',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -41,6 +43,7 @@ class RoleSeeder extends Seeder
             'name' => 'zone.update',
             'display_name' => 'Actualizar Zona',
             'group' => 'Zonas',
+            'group_id' => '1',
             'route' => '/zone',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -49,6 +52,7 @@ class RoleSeeder extends Seeder
             'name' => 'zone.get',
             'display_name' => 'Consultar Zona',
             'group' => 'Zonas',
+            'group_id' => '1',
             'route' => '/zone',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -57,6 +61,7 @@ class RoleSeeder extends Seeder
             'name' => 'zone.delete',
             'display_name' => 'Eliminar Zona',
             'group' => 'Zonas',
+            'group_id' => '1',
             'route' => '/zone',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -70,6 +75,7 @@ class RoleSeeder extends Seeder
             'name' => 'role.list',
             'display_name' => 'Listar Roles',
             'group' => 'Roles',
+            'group_id' => '1',
             'route' => '/role',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -78,6 +84,7 @@ class RoleSeeder extends Seeder
             'name' => 'role.create',
             'display_name' => 'Crear Rol',
             'group' => 'Roles',
+            'group_id' => '1',
             'route' => '/role',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -86,6 +93,7 @@ class RoleSeeder extends Seeder
             'name' => 'role.update',
             'display_name' => 'Actualizar Rol',
             'group' => 'Roles',
+            'group_id' => '1',
             'route' => '/role',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -94,6 +102,7 @@ class RoleSeeder extends Seeder
             'name' => 'role.get',
             'display_name' => 'Consultar Rol',
             'group' => 'Roles',
+            'group_id' => '1',
             'route' => '/role',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -102,6 +111,7 @@ class RoleSeeder extends Seeder
             'name' => 'role.delete',
             'display_name' => 'Eliminar Rol',
             'group' => 'Roles',
+            'group_id' => '1',
             'route' => '/role',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -115,6 +125,7 @@ class RoleSeeder extends Seeder
             'name' => 'yard.list',
             'display_name' => 'Listar Patios',
             'group' => 'Patios',
+            'group_id' => '1',
             'route' => '/yard',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -123,6 +134,7 @@ class RoleSeeder extends Seeder
             'name' => 'yard.create',
             'display_name' => 'Crear Patio',
             'group' => 'Patios',
+            'group_id' => '1',
             'route' => '/yard',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -131,6 +143,7 @@ class RoleSeeder extends Seeder
             'name' => 'yard.update',
             'display_name' => 'Actualizar Patio',
             'group' => 'Patios',
+            'group_id' => '1',
             'route' => '/yard',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -139,6 +152,7 @@ class RoleSeeder extends Seeder
             'name' => 'yard.get',
             'display_name' => 'Consultar Patio',
             'group' => 'Patios',
+            'group_id' => '1',
             'route' => '/yard',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -147,6 +161,7 @@ class RoleSeeder extends Seeder
             'name' => 'yard.delete',
             'display_name' => 'Eliminar Patio',
             'group' => 'Patios',
+            'group_id' => '1',
             'route' => '/yard',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -160,6 +175,7 @@ class RoleSeeder extends Seeder
             'name' => 'user.list',
             'display_name' => 'Listar Usuarios',
             'group' => 'Usuarios',
+            'group_id' => '1',
             'route' => '/user',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -168,6 +184,7 @@ class RoleSeeder extends Seeder
             'name' => 'user.create',
             'display_name' => 'Crear Usuario',
             'group' => 'Usuarios',
+            'group_id' => '1',
             'route' => '/user',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -176,6 +193,7 @@ class RoleSeeder extends Seeder
             'name' => 'user.update',
             'display_name' => 'Actualizar Usuario',
             'group' => 'Usuarios',
+            'group_id' => '1',
             'route' => '/user',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -184,6 +202,7 @@ class RoleSeeder extends Seeder
             'name' => 'user.get',
             'display_name' => 'Consultar Usuario',
             'group' => 'Usuarios',
+            'group_id' => '1',
             'route' => '/user',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -192,6 +211,7 @@ class RoleSeeder extends Seeder
             'name' => 'user.delete',
             'display_name' => 'Eliminar Usuario',
             'group' => 'Usuarios',
+            'group_id' => '1',
             'route' => '/user',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -200,6 +220,7 @@ class RoleSeeder extends Seeder
             'name' => 'user.updateProfile',
             'display_name' => 'Actualizar perfil',
             'group' => 'Usuarios',
+            'group_id' => '1',
             'route' => '/user',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -213,6 +234,7 @@ class RoleSeeder extends Seeder
             'name' => 'material.list',
             'display_name' => 'Listar Materiales',
             'group' => 'Materiales',
+            'group_id' => '1',
             'route' => '/material',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -221,6 +243,7 @@ class RoleSeeder extends Seeder
             'name' => 'material.create',
             'display_name' => 'Crear Material',
             'group' => 'Materiales',
+            'group_id' => '1',
             'route' => '/material',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -229,6 +252,7 @@ class RoleSeeder extends Seeder
             'name' => 'material.update',
             'display_name' => 'Actualizar Material',
             'group' => 'Materiales',
+            'group_id' => '1',
             'route' => '/material',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -237,6 +261,7 @@ class RoleSeeder extends Seeder
             'name' => 'material.get',
             'display_name' => 'Consultar Material',
             'group' => 'Materiales',
+            'group_id' => '1',
             'route' => '/material',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -245,6 +270,7 @@ class RoleSeeder extends Seeder
             'name' => 'material.delete',
             'display_name' => 'Eliminar Material',
             'group' => 'Materiales',
+            'group_id' => '1',
             'route' => '/material',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -258,6 +284,7 @@ class RoleSeeder extends Seeder
             'name' => 'third.list',
             'display_name' => 'Listar Terceros',
             'group' => 'Terceros',
+            'group_id' => '1',
             'route' => '/third',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -266,6 +293,7 @@ class RoleSeeder extends Seeder
             'name' => 'third.createInBatch',
             'display_name' => 'Crear Terceros En Lote',
             'group' => 'Terceros',
+            'group_id' => '1',
             'route' => '/third',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -274,6 +302,7 @@ class RoleSeeder extends Seeder
             'name' => 'third.create',
             'display_name' => 'Crear Tercero',
             'group' => 'Terceros',
+            'group_id' => '1',
             'route' => '/third',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -282,6 +311,7 @@ class RoleSeeder extends Seeder
             'name' => 'third.update',
             'display_name' => 'Actualizar Tercero',
             'group' => 'Terceros',
+            'group_id' => '1',
             'route' => '/third',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -290,6 +320,7 @@ class RoleSeeder extends Seeder
             'name' => 'third.get',
             'display_name' => 'Consultar Tercero',
             'group' => 'Terceros',
+            'group_id' => '1',
             'route' => '/third',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -298,6 +329,7 @@ class RoleSeeder extends Seeder
             'name' => 'third.delete',
             'display_name' => 'Eliminar Tercero',
             'group' => 'Terceros',
+            'group_id' => '1',
             'route' => '/third',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -311,6 +343,7 @@ class RoleSeeder extends Seeder
             'name' => 'adjustment.list',
             'display_name' => 'Listar Ajustes',
             'group' => 'Ajustes',
+            'group_id' => '2',
             'route' => '/adjustment',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -319,6 +352,7 @@ class RoleSeeder extends Seeder
             'name' => 'adjustment.create',
             'display_name' => 'Crear Ajuste',
             'group' => 'Ajustes',
+            'group_id' => '2',
             'route' => '/adjustment',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -327,6 +361,7 @@ class RoleSeeder extends Seeder
             'name' => 'adjustment.update',
             'display_name' => 'Actualizar Ajuste',
             'group' => 'Ajustes',
+            'group_id' => '2',
             'route' => '/adjustment',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -335,6 +370,7 @@ class RoleSeeder extends Seeder
             'name' => 'adjustment.get',
             'display_name' => 'Consultar Ajuste',
             'group' => 'Ajustes',
+            'group_id' => '2',
             'route' => '/adjustment',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -343,6 +379,7 @@ class RoleSeeder extends Seeder
             'name' => 'adjustment.delete',
             'display_name' => 'Eliminar Ajuste',
             'group' => 'Ajustes',
+            'group_id' => '2',
             'route' => '/adjustment',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -356,6 +393,7 @@ class RoleSeeder extends Seeder
             'name' => 'rate.list',
             'display_name' => 'Listar Tarifas',
             'group' => 'Tarifas',
+            'group_id' => '2',
             'route' => '/rate',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -364,6 +402,7 @@ class RoleSeeder extends Seeder
             'name' => 'rate.create',
             'display_name' => 'Crear Tarifa',
             'group' => 'Tarifas',
+            'group_id' => '2',
             'route' => '/rate',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -372,6 +411,7 @@ class RoleSeeder extends Seeder
             'name' => 'rate.update',
             'display_name' => 'Actualizar Tarifa',
             'group' => 'Tarifas',
+            'group_id' => '2',
             'route' => '/rate',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -380,6 +420,7 @@ class RoleSeeder extends Seeder
             'name' => 'rate.get',
             'display_name' => 'Consultar Tarifa',
             'group' => 'Tarifas',
+            'group_id' => '2',
             'route' => '/rate',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -388,6 +429,7 @@ class RoleSeeder extends Seeder
             'name' => 'rate.delete',
             'display_name' => 'Eliminar Tarifa',
             'group' => 'Tarifas',
+            'group_id' => '2',
             'route' => '/rate',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -401,6 +443,7 @@ class RoleSeeder extends Seeder
             'name' => 'ticket.list',
             'display_name' => 'Listar Tiquetes',
             'group' => 'Tiquetes',
+            'group_id' => '3',
             'route' => '/ticket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -409,6 +452,7 @@ class RoleSeeder extends Seeder
             'name' => 'ticket.create',
             'display_name' => 'Crear Tiquete',
             'group' => 'Tiquetes',
+            'group_id' => '3',
             'route' => '/ticket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -417,6 +461,7 @@ class RoleSeeder extends Seeder
             'name' => 'ticket.update',
             'display_name' => 'Actualizar Tiquete',
             'group' => 'Tiquetes',
+            'group_id' => '3',
             'route' => '/ticket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -425,6 +470,7 @@ class RoleSeeder extends Seeder
             'name' => 'ticket.get',
             'display_name' => 'Consultar Tiquete',
             'group' => 'Tiquetes',
+            'group_id' => '3',
             'route' => '/ticket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -433,6 +479,7 @@ class RoleSeeder extends Seeder
             'name' => 'ticket.delete',
             'display_name' => 'Eliminar Tiquete',
             'group' => 'Tiquetes',
+            'group_id' => '3',
             'route' => '/ticket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -446,6 +493,7 @@ class RoleSeeder extends Seeder
             'name' => 'localTicket.list',
             'display_name' => 'Listar Tiquetes',
             'group' => 'Tiquetes (Offline)',
+            'group_id' => '3',
             'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -454,6 +502,7 @@ class RoleSeeder extends Seeder
             'name' => 'localTicket.create',
             'display_name' => 'Crear Tiquete',
             'group' => 'Tiquetes (Offline)',
+            'group_id' => '3',
             'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -462,6 +511,7 @@ class RoleSeeder extends Seeder
             'name' => 'localTicket.update',
             'display_name' => 'Actualizar Tiquete',
             'group' => 'Tiquetes (Offline)',
+            'group_id' => '3',
             'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -470,6 +520,7 @@ class RoleSeeder extends Seeder
             'name' => 'localTicket.get',
             'display_name' => 'Consultar Tiquete',
             'group' => 'Tiquetes (Offline)',
+            'group_id' => '3',
             'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -478,6 +529,7 @@ class RoleSeeder extends Seeder
             'name' => 'localTicket.delete',
             'display_name' => 'Eliminar Tiquete',
             'group' => 'Tiquetes (Offline)',
+            'group_id' => '3',
             'route' => '/localTicket',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -492,6 +544,7 @@ class RoleSeeder extends Seeder
             'display_name' => 'Sincronizar',
             'group' => 'Sincronización',
             'route' => '/synchronization',
+            'group_id' => null,
             'guard_name' => 'api',
             'menu' => 0
         ])->syncRoles([$adminRole]);
@@ -505,6 +558,7 @@ class RoleSeeder extends Seeder
             'name' => 'materialSettlement.list',
             'display_name' => 'Listar Liquidaciones',
             'group' => 'Liquidación (Material)',
+            'group_id' => '2',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -513,6 +567,7 @@ class RoleSeeder extends Seeder
             'name' => 'materialSettlement.get',
             'display_name' => 'Consultar Liquidación',
             'group' => 'Liquidación (Material)',
+            'group_id' => '2',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -521,6 +576,7 @@ class RoleSeeder extends Seeder
             'name' => 'materialSettlement.print',
             'display_name' => 'Imprimir Liquidación',
             'group' => 'Liquidación (Material)',
+            'group_id' => '2',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -529,6 +585,7 @@ class RoleSeeder extends Seeder
             'name' => 'materialSettlement.settle',
             'display_name' => 'Liquidar',
             'group' => 'Liquidación (Material)',
+            'group_id' => '2',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -537,6 +594,7 @@ class RoleSeeder extends Seeder
             'name' => 'materialSettlement.update',
             'display_name' => 'Actualizar Liquidación',
             'group' => 'Liquidación (Material)',
+            'group_id' => '2',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -545,6 +603,7 @@ class RoleSeeder extends Seeder
             'name' => 'materialSettlement.delete',
             'display_name' => 'Eliminar Liquidación',
             'group' => 'Liquidación (Material)',
+            'group_id' => '2',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -553,6 +612,7 @@ class RoleSeeder extends Seeder
             'name' => 'materialSettlement.addInformation',
             'display_name' => 'Agregar Información',
             'group' => 'Liquidación (Material)',
+            'group_id' => '2',
             'route' => '/materialSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -566,6 +626,7 @@ class RoleSeeder extends Seeder
             'name' => 'freightSettlement.list',
             'display_name' => 'Listar Liquidaciones',
             'group' => 'Liquidación (Flete)',
+            'group_id' => '2',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -574,6 +635,7 @@ class RoleSeeder extends Seeder
             'name' => 'freightSettlement.get',
             'display_name' => 'Consultar Liquidación',
             'group' => 'Liquidación (Flete)',
+            'group_id' => '2',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -582,6 +644,7 @@ class RoleSeeder extends Seeder
             'name' => 'freightSettlement.print',
             'display_name' => 'Imprimir Liquidación',
             'group' => 'Liquidación (Flete)',
+            'group_id' => '2',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -590,6 +653,7 @@ class RoleSeeder extends Seeder
             'name' => 'freightSettlement.settle',
             'display_name' => 'Liquidar',
             'group' => 'Liquidación (Flete)',
+            'group_id' => '2',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -598,6 +662,7 @@ class RoleSeeder extends Seeder
             'name' => 'freightSettlement.update',
             'display_name' => 'Actualizar Liquidación',
             'group' => 'Liquidación (Flete)',
+            'group_id' => '2',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -606,6 +671,7 @@ class RoleSeeder extends Seeder
             'name' => 'freightSettlement.delete',
             'display_name' => 'Eliminar Liquidación',
             'group' => 'Liquidación (Flete)',
+            'group_id' => '2',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -614,6 +680,7 @@ class RoleSeeder extends Seeder
             'name' => 'freightSettlement.addInformation',
             'display_name' => 'Agregar Información',
             'group' => 'Liquidación (Flete)',
+            'group_id' => '2',
             'route' => '/freightSettlement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -627,6 +694,7 @@ class RoleSeeder extends Seeder
             'name' => 'report.movements',
             'display_name' => 'Informe Movimientos',
             'group' => 'Reportes',
+            'group_id' => '4',
             'route' => '/report',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -635,6 +703,7 @@ class RoleSeeder extends Seeder
             'name' => 'report.yardStock',
             'display_name' => 'Stock por patio',
             'group' => 'Reportes',
+            'group_id' => '4',
             'route' => '/report',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -643,6 +712,7 @@ class RoleSeeder extends Seeder
             'name' => 'report.completeTransfers',
             'display_name' => 'Traslados completos',
             'group' => 'Reportes',
+            'group_id' => '4',
             'route' => '/report',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -651,6 +721,7 @@ class RoleSeeder extends Seeder
             'name' => 'report.uncompleteTransfers',
             'display_name' => 'Traslados incompletos',
             'group' => 'Reportes',
+            'group_id' => '4',
             'route' => '/report',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -659,6 +730,7 @@ class RoleSeeder extends Seeder
             'name' => 'report.unbilledPurchases',
             'display_name' => 'Compras no facturadas',
             'group' => 'Reportes',
+            'group_id' => '4',
             'route' => '/report',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -667,6 +739,7 @@ class RoleSeeder extends Seeder
             'name' => 'report.unbilledSales',
             'display_name' => 'Ventas no facturadas',
             'group' => 'Reportes',
+            'group_id' => '4',
             'route' => '/report',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -675,6 +748,7 @@ class RoleSeeder extends Seeder
             'name' => 'report.unbilledFreights',
             'display_name' => 'Fletes no facturados',
             'group' => 'Reportes',
+            'group_id' => '4',
             'route' => '/report',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -688,6 +762,7 @@ class RoleSeeder extends Seeder
             'name' => 'movement.list',
             'display_name' => 'Listar Movimientos',
             'group' => 'Movimiento',
+            'group_id' => '3',
             'route' => '/movement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -696,6 +771,7 @@ class RoleSeeder extends Seeder
             'name' => 'movement.create',
             'display_name' => 'Crear Movimiento',
             'group' => 'Movimiento',
+            'group_id' => '3',
             'route' => '/movement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -704,6 +780,7 @@ class RoleSeeder extends Seeder
             'name' => 'movement.delete',
             'display_name' => 'Eliminar Movimiento',
             'group' => 'Movimiento',
+            'group_id' => '3',
             'route' => '/movement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -712,6 +789,7 @@ class RoleSeeder extends Seeder
             'name' => 'movement.getTickets',
             'display_name' => 'Consultar Tiquetes',
             'group' => 'Movimiento',
+            'group_id' => '3',
             'route' => '/movement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
@@ -720,8 +798,62 @@ class RoleSeeder extends Seeder
             'name' => 'movement.print',
             'display_name' => 'Imprimir Movimiento',
             'group' => 'Movimiento',
+            'group_id' => '3',
             'route' => '/movement',
             'guard_name' => 'api'
         ])->syncRoles([$adminRole]);
+
+
+        
+        /*
+            |--------------------------------------------------------------------------
+            | Batterie permissions
+            |--------------------------------------------------------------------------
+        */
+        Permission::create([
+            'name' => 'batterie.list',
+            'display_name' => 'Listar Baterias',
+            'group' => 'Baterias',
+            'group_id' => '1',
+            'route' => '/batterie',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'batterie.create',
+            'display_name' => 'Crear Bateria',
+            'group' => 'Baterias',
+            'group_id' => '1',
+            'route' => '/batterie',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'batterie.update',
+            'display_name' => 'Actualizar Bateria',
+            'group' => 'Baterias',
+            'group_id' => '1',
+            'route' => '/batterie',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+        
+        Permission::create([
+            'name' => 'batterie.get',
+            'display_name' => 'Consultar Bateria',
+            'group' => 'Baterias',
+            'group_id' => '1',
+            'route' => '/batterie',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
+        Permission::create([
+            'name' => 'batterie.delete',
+            'display_name' => 'Eliminar Bateria',
+            'group' => 'Baterias',
+            'group_id' => '1',
+            'route' => '/batterie',
+            'guard_name' => 'api'
+        ])->syncRoles([$adminRole]);
+
     }
 }
