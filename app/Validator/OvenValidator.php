@@ -14,7 +14,7 @@
 
         private function rules(){
             return[
-                'name' => 'required|min:1|max:30|unique:ovens,name,'.$this->data['id'],
+                'name' => 'required|min:1|max:30|unique:ovens,name,'.$this->data['id'].',id,batterie,'.$this->data['batterie'],
             ];
         }
 

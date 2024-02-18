@@ -1,6 +1,7 @@
 <?php
     namespace App\Validator;
     use Illuminate\Support\Facades\Validator;
+    use App\Validator\Rule;
 
     class BatterieValidator{
 
@@ -14,7 +15,7 @@
 
         private function rules(){
             return[
-                'name' => 'required|min:1|max:30|unique:batteries,name,'.$this->data['id'],
+                'name' => 'required|min:1|max:30|unique:batteries,name,'.$this->data['id'].',id,yard,'.$this->data['yard'],
             ];
         }
 
