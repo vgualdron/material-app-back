@@ -19,14 +19,16 @@
             $this->validator = $validator;
         }    
 
-        function list(){
+        function list(int $yard) {
             try {
                 $sql = $this->batterie->select(
                     'id',
                     'name',
                     'description',
                     'active',
-                    'yard')->get();
+                    'yard')
+                    ->where('yard', $yard)
+                    ->get();
 
 
                 $batteries = [];

@@ -116,6 +116,7 @@
                                     'name' => $user->name,
                                     'document' => $user->document_number,
                                     'yard' => $user->change_yard.'-'.$user->yard,
+                                    'currentYard' => $user->yard,
                                     'user' => $user->id
                                 );
                                 return response()->json([

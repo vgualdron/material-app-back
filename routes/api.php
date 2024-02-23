@@ -173,7 +173,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/movement"], function ()
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/batterie"], function () {
-    Route::get('/list', [BatterieController::class, 'list'])->middleware('can:batterie.list')->name('batterie.list');
+    Route::get('/list/{yard}', [BatterieController::class, 'list'])->middleware('can:batterie.list')->name('batterie.list');
     Route::post('/create', [BatterieController::class, 'create'])->middleware('can:batterie.create')->name('batterie.create');
     Route::put('/update/{id}', [BatterieController::class, 'update'])->middleware('can:batterie.update')->name('batterie.update');
     Route::delete('/delete/{id}', [BatterieController::class, 'delete'])->middleware('can:batterie.delete')->name('batterie.delete');

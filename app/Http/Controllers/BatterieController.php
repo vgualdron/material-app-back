@@ -15,8 +15,8 @@ class BatterieController extends Controller
         $this->service = $service;
     }
 
-    function list(){
-        return $this->service->list();
+    function list($yard){
+        return $this->service->list($yard);
     }
 
     function create(){
