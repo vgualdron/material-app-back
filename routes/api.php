@@ -18,7 +18,9 @@ use App\Http\Controllers\{
                         MaterialSettlementController,
                         FreightSettlementController,
                         ReportController,
-                        MovementController
+                        MovementController,
+                        BatterieController,
+                        OvenController,
                     };
 
 /*
@@ -169,4 +171,20 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/movement"], function ()
     Route::get('/create/{startDate}/{finalDate}/{tickets}', [MovementController::class, 'create'])->middleware('can:movement.create')->name('movement.create');
     Route::delete('/delete/{id}', [MovementController::class, 'delete'])->middleware('can:movement.delete')->name('movement.delete');
     Route::get('/print/{id}', [MovementController::class, 'print'])->middleware('can:movement.print')->name('movement.print');
+});
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/batterie"], function () {
+    Route::get('/list/{yard}', [BatterieController::class, 'list'])->middleware('can:batterie.list')->name('batterie.list');
+    Route::post('/create', [BatterieController::class, 'create'])->middleware('can:batterie.create')->name('batterie.create');
+    Route::put('/update/{id}', [BatterieController::class, 'update'])->middleware('can:batterie.update')->name('batterie.update');
+    Route::delete('/delete/{id}', [BatterieController::class, 'delete'])->middleware('can:batterie.delete')->name('batterie.delete');
+    Route::get('/get/{id}', [BatterieController::class, 'get'])->middleware('can:batterie.get')->name('batterie.get');
+});
+
+Route::group(['middleware' => 'auth:api' , "prefix" => "/oven"], function () {
+    Route::get('/list', [OvenController::class, 'list'])->middleware('can:oven.list')->name('oven.list');
+    Route::post('/create', [OvenController::class, 'create'])->middleware('can:oven.create')->name('oven.create');
+    Route::put('/update/{id}', [OvenController::class, 'update'])->middleware('can:oven.update')->name('oven.update');
+    Route::delete('/delete/{id}', [OvenController::class, 'delete'])->middleware('can:oven.delete')->name('oven.delete');
+    Route::get('/get/{id}', [OvenController::class, 'get'])->middleware('can:oven.get')->name('oven.get');
 });
