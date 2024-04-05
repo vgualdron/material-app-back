@@ -8,5 +8,6 @@
         function update(array $material, int $id);
         function delete(int $id); 
         function get(int $id);
+        function getMaterialsByYard(int $yard);
     }
 ?>

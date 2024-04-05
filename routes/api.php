@@ -85,6 +85,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/material"], function ()
     Route::put('/update/{id}', [MaterialController::class, 'update'])->middleware('can:material.update')->name('material.update');
     Route::delete('/delete/{id}', [MaterialController::class, 'delete'])->middleware('can:material.delete')->name('material.delete');
     Route::get('/get/{id}', [MaterialController::class, 'get'])->middleware('can:material.get')->name('material.get');
+    Route::get('/getMaterialsByYard/{yard}', [MaterialController::class, 'getMaterialsByYard'])->name('material.getMaterialsByYard');
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/third"], function () {

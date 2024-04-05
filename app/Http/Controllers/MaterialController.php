@@ -34,4 +34,8 @@ class MaterialController extends Controller
     function get(int $id){
         return $this->service->get($id);
     }
+
+    function getMaterialsByYard(int $yard){
+        return $this->service->getMaterialsByYard($yard);
+    }
 }
