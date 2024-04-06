@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('adjustments', function (Blueprint $table) {
             $table->bigIncrements('id')->unsigned();
+            $table->string('origin', 1)->collation('utf8_spanish_ci');
             $table->string('type', 1)->collation('utf8_spanish_ci');
             $table->unsignedBigInteger('yard')->unsigned();
             $table->unsignedBigInteger('material')->unsigned();
             $table->decimal('amount', 10,2);
             $table->date('date');
             $table->text('observation')->collation('utf8_spanish_ci')->nullable();
+            $table->string('uuid', 100)->collation('utf8_spanish_ci')->nullable();
             $table->foreign('yard')->references('id')->on('yards');
             $table->foreign('material')->references('id')->on('materials');
             $table->timestamps();

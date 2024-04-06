@@ -34,4 +34,8 @@ class AdjustmentController extends Controller
     function get(int $id){
         return $this->service->get($id);
     }
+
+    function createFromProccess(){
+        return $this->service->createFromProccess($this->request->all());
+    }
 }

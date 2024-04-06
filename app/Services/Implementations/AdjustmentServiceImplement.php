@@ -3,19 +3,27 @@
     use App\Services\Interfaces\AdjustmentServiceInterface;
     use Symfony\Component\HttpFoundation\Response;
     use App\Models\Adjustment;
+    use App\Models\Yard;
+    use App\Models\Material;
     use App\Validator\AdjustmentValidator;
     use App\Traits\Commons;
-    use Illuminate\Support\Facades\DB;
+use DateTime;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
     
     class AdjustmentServiceImplement implements AdjustmentServiceInterface {
 
         use Commons;
 
         private $adjustment;
+        private $yard;
+        private $material;
         private $validator;
 
         function __construct(AdjustmentValidator $validator){
             $this->adjustment = new Adjustment;
+            $this->yard = new Yard;
+            $this->material = new Material;
             $this->validator = $validator;
         }    
 
@@ -32,6 +40,7 @@
                     )                   
                     ->join('yards as y', 'a.yard', 'y.id')
                     ->join('materials as m', 'a.material', 'm.id')
+                    ->where('a.origin', 'A')
                     ->orderBy('date', 'desc')
                     ->get();
 
@@ -90,7 +99,7 @@
                 return response()->json([
                     'message' => [
                         [
-                            'text' => /*'Advertencia al registrar el ajuste'*/$e->getMessage(),
+                            'text' => 'Advertencia al registrar el ajuste',
                             'detail' => 'Si este problema persiste, contacte con un administrador'
                         ]
                     ]
@@ -222,6 +231,91 @@
                     'message' => [
                         [
                             'text' => 'Se ha presentado un error al buscar el ajuste',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function createFromProccess(array $data){
+            try {
+                if(!isset($data['yard']) || !isset($data['origin']) || !isset($data['material']) || count($data['material']) < 1) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al registrar el proceso',
+                                'detail' => 'No suministró suficiente información'
+                            ]
+                        ]
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+                $yard = $this->yard::find($data['yard']);
+                if (is_null($yard)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al registrar el proceso',
+                                'detail' => 'El patio ingresado, no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+                $materialIds = array_column($data['material'], 'material');
+                $materials = $this->material::select('id')
+                    ->whereIn('id', $materialIds)
+                    ->count();
+                if($materials !== count($materialIds)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al registrar el proceso',
+                                'detail' => 'Uno o mas patios seleccionados, no existen'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+                $adjustmentsToSave = [];
+                $date = date('Y-m-d');
+                $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+                $uuid = md5(Auth::id().'/'.$now->format("m-d-Y H:i:s.u"));
+                foreach ($data['material'] as $item) {
+                    $adjustmentsToSave[] = [
+                        'origin' => $data['origin'],
+                        'type' => $item['type'],
+                        'yard' => $data['yard'],
+                        'material' => $item['material'],
+                        'amount' => $item['amount'],
+                        'date' => $date,
+                        'uuid' => $uuid,
+                    ];
+                }
+                $this->adjustment::upsert($adjustmentsToSave,
+                    ['id'],
+                    [
+                        'origin',
+                        'type',
+                        'yard',
+                        'material',
+                        'amount',
+                        'date',
+                        'uuid'
+                    ]
+                );
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Proceso registrado con éxito',
+                            'detail' => null
+                        ]
+                    ]
+                ], Response::HTTP_OK);
+            } catch (\Throwable $e) {
+                dd($e);
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al registrar el proceso',
                             'detail' => 'Si este problema persiste, contacte con un administrador'
                         ]
                     ]

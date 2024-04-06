@@ -8,5 +8,6 @@
         function update(array $adjustment, int $id);
         function delete(int $id); 
         function get(int $id);
+        function createFromProccess(array $data);
     }
 ?>

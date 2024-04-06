@@ -105,6 +105,7 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/adjustment"], function 
     Route::put('/update/{id}', [AdjustmentController::class, 'update'])->middleware('can:adjustment.update')->name('adjustment.update');
     Route::delete('/delete/{id}', [AdjustmentController::class, 'delete'])->middleware('can:adjustment.delete')->name('adjustment.delete');
     Route::get('/get/{id}', [AdjustmentController::class, 'get'])->middleware('can:adjustment.get')->name('adjustment.get');
+    Route::post('/createFromProccess', [AdjustmentController::class, 'createFromProccess'])->name('adjustment.create');
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/rate"], function () {
