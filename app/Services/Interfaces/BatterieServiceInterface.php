@@ -3,7 +3,7 @@
     
     interface BatterieServiceInterface
     {
-        function list(int $yard);
+        function list();
         function create(array $batterie);
         function update(array $batterie, int $id);
         function delete(int $id); 

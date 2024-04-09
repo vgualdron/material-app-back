@@ -19,7 +19,7 @@
             $this->validator = $validator;
         }    
 
-        function list(int $yard) {
+        function list() {
             try {
                 $sql = $this->batterie->select(
                     'id',
@@ -27,7 +27,6 @@
                     'description',
                     'active',
                     'yard')
-                    ->where('yard', $yard)
                     ->get();
 
 
