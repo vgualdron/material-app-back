@@ -9,5 +9,7 @@
         function delete(int $id); 
         function get(int $id);
         function createFromProccess(array $data);
+        function listProccess(string $startDate, string $finalDate, string $origin, string $yard);
+        function deleteProccess(string $uuid);
     }
 ?>

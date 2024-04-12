@@ -38,4 +38,12 @@ class AdjustmentController extends Controller
     function createFromProccess(){
         return $this->service->createFromProccess($this->request->all());
     }
+
+    function listProccess($startDate, $finalDate, $origin, $yard){
+        return $this->service->listProccess($startDate, $finalDate, $origin, $yard);
+    }
+
+    function deleteProccess(string $uuid){
+        return $this->service->deleteProccess($uuid);
+    }
 }

@@ -240,7 +240,7 @@ use Illuminate\Support\Facades\DB;
 
         function createFromProccess(array $data){
             try {
-                if(!isset($data['yard']) || !isset($data['origin']) || !isset($data['material']) || count($data['material']) < 1) {
+                if(!isset($data['yard']) || !isset($data['date']) || !isset($data['origin']) || !isset($data['material']) || count($data['material']) < 1) {
                     return response()->json([
                         'message' => [
                             [
@@ -276,7 +276,6 @@ use Illuminate\Support\Facades\DB;
                     ], Response::HTTP_NOT_FOUND);
                 }
                 $adjustmentsToSave = [];
-                $date = date('Y-m-d');
                 $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
                 $uuid = md5(Auth::id().'/'.$now->format("m-d-Y H:i:s.u"));
                 foreach ($data['material'] as $item) {
@@ -286,7 +285,7 @@ use Illuminate\Support\Facades\DB;
                         'yard' => $data['yard'],
                         'material' => $item['material'],
                         'amount' => $item['amount'],
-                        'date' => $date,
+                        'date' => $data['date'],
                         'uuid' => $uuid,
                     ];
                 }
@@ -311,11 +310,151 @@ use Illuminate\Support\Facades\DB;
                     ]
                 ], Response::HTTP_OK);
             } catch (\Throwable $e) {
-                dd($e);
                 return response()->json([
                     'message' => [
                         [
                             'text' => 'Advertencia al registrar el proceso',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function listProccess(string $startDate, string $finalDate, string $origin, string $yard){
+            try {
+                if(!isset($startDate) || !isset($finalDate) || !isset($yard) || !isset($origin)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al obtener procesos',
+                                'detail' => 'No suministró suficiente información'
+                            ]
+                        ]
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+                $exists = $this->yard::find($yard);
+                if (is_null($exists)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al obtener procesos',
+                                'detail' => 'El patio ingresado, no existe'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+                $proccess = $this->adjustment::from('adjustments as a')
+                    ->select(
+                        'a.uuid as uuid',
+                        'a.date as date',
+                        'm.id as material',
+                        'm.name as materialName',
+                        'a.amount as amount',
+                        'a.origin as origin',
+                        'a.type as type',
+                        'a.yard as yard'
+                    )
+                    ->join('materials as m', 'a.material', 'm.id')
+                    ->whereBetween('a.date', [$startDate, $finalDate])
+                    ->where('a.origin', $origin)
+                    ->where('a.yard', $yard)
+                    ->get()
+                    ->toArray();
+                if(count($proccess) === 0) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al obtener procesos',
+                                'detail' => 'No existen procesos con los criterios especificados'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+                $data = [];
+                foreach ($proccess as $item) {
+                    $uuid = $item['uuid'];
+                    $key = array_search($uuid , array_column($data, 'uuid'));
+                    if($key !== false) {
+                        $data[$key]['material'][] = [
+                            'id' => $item['material'],
+                            'name' => $item['materialName'],
+                            'type' => $item['type'],
+                            'amount' => $item['amount']
+                        ];
+                    } else {
+                        $data[] = [
+                            'uuid' => $uuid,
+                            'origin' => $item['origin'],
+                            'date' => $item['date'],
+                            'yard' => $item['yard'],
+                            'material' => [
+                                [
+                                    'id' => $item['material'],
+                                    'name' => $item['materialName'],
+                                    'type' => $item['type'],
+                                    'amount' => $item['amount']
+                                ]
+                            ]
+                        ];
+                    }
+                }
+                return response()->json([
+                    'data' => $data
+                ], Response::HTTP_OK);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al obtener procesos',
+                            'detail' => 'Si este problema persiste, contacte con un administrador'
+                        ]
+                    ]
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        function deleteProccess(string $uuid){
+            try {
+                if(!isset($uuid)) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al eliminar proceso',
+                                'detail' => 'No suministró suficiente información'
+                            ]
+                        ]
+                    ], Response::HTTP_BAD_REQUEST);
+                }
+                $proccess = $this->adjustment::select('id')
+                    ->where('uuid', $uuid)
+                    ->get()
+                    ->toArray();
+                if (count($proccess) === 0) {
+                    return response()->json([
+                        'message' => [
+                            [
+                                'text' => 'Advertencia al eliminar proceso',
+                                'detail' => 'No hay proceso con el codigo ingresado'
+                            ]
+                        ]
+                    ], Response::HTTP_NOT_FOUND);
+                }
+                $proccessIds = array_column($proccess, 'id');
+                $this->adjustment::whereIn('id', $proccessIds)->delete();
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Proceso eliminado con éxito',
+                            'detail' => null
+                        ]
+                    ]
+                ], Response::HTTP_OK);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => [
+                        [
+                            'text' => 'Advertencia al obtener procesos',
                             'detail' => 'Si este problema persiste, contacte con un administrador'
                         ]
                     ]
