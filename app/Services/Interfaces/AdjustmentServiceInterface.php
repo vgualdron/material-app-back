@@ -11,5 +11,9 @@
         function createFromProccess(array $data);
         function listProccess(string $startDate, string $finalDate, string $origin, string $yard);
         function deleteProccess(string $uuid);
+        function listEmptyOvens(int $yard);
+        function createFromBaking(array $data);
+        function listFilledOvens(int $yard);
+        function createFromBakingRelease(array $data);
     }
 ?>

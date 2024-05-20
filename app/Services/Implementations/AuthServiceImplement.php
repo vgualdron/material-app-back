@@ -49,6 +49,7 @@
 
         function login(string $documentNumber, string $password){
             try {
+                Artisan::call('cache:clear');
                 Artisan::call('config:clear');
                 Artisan::call('optimize:clear');
                 $user = $this->user::where('document_number', $documentNumber)->first();

@@ -46,4 +46,20 @@ class AdjustmentController extends Controller
     function deleteProccess(string $uuid){
         return $this->service->deleteProccess($uuid);
     }
+
+    function listEmptyOvens(int $yard){
+        return $this->service->listEmptyOvens($yard);
+    }
+
+    function createFromBaking(){
+        return $this->service->createFromBaking($this->request->all());
+    }
+
+    function listFilledOvens(int $yard){
+        return $this->service->listFilledOvens($yard);
+    }
+
+    function createFromBakingRelease(){
+        return $this->service->createFromBakingRelease($this->request->all());
+    }
 }

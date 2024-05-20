@@ -108,6 +108,10 @@ Route::group(['middleware' => 'auth:api' , "prefix" => "/adjustment"], function 
     Route::post('/createFromProccess', [AdjustmentController::class, 'createFromProccess'])->name('adjustment.createFromProccess');
     Route::get('/listProccess/{startDate}/{finalDate}/{origin}/{yard}', [AdjustmentController::class, 'listProccess'])->name('adjustment.listProccess');
     Route::delete('/deleteProccess/{uuid}', [AdjustmentController::class, 'deleteProccess'])->name('adjustment.deleteProccess');
+    Route::get('/listEmptyOvens/{yard}', [AdjustmentController::class, 'listEmptyOvens'])->name('adjustment.listEmptyOvens');
+    Route::post('/createFromBaking', [AdjustmentController::class, 'createFromBaking'])->name('adjustment.createFromBaking');
+    Route::get('/listFilledOvens/{yard}', [AdjustmentController::class, 'listFilledOvens'])->name('adjustment.listFilledOvens');
+    Route::post('/createFromBakingRelease', [AdjustmentController::class, 'createFromBakingRelease'])->name('adjustment.createFromBakingRelease');
 });
 
 Route::group(['middleware' => 'auth:api' , "prefix" => "/rate"], function () {
